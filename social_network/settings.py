@@ -14,9 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -40,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.core',
     # 'bootstrap3',
     'social',
 )
@@ -71,7 +68,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.media',
             ],
         },
     },

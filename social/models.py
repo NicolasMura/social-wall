@@ -2,11 +2,8 @@
 from __future__ import unicode_literals  # utile ?
 
 from django.conf import settings
-# from django.contrib.auth.models import User
-# from django.contrib.sites.models import Site  # utile ?
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from django.utils import timezone
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
 
 COMMENT_MAX_LENGTH = 3000
@@ -27,21 +24,6 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return self.username
-
-# class UserProfile(User):
-#     class Meta:
-#         verbose_name = 'Utilisateur'
-#         verbose_name_plural = 'Utilisateurs'
-
-#     avatar = models.ImageField(
-#         verbose_name="Votre avatar",
-#         null=True,
-#         blank=True,
-#         upload_to="avatars/"
-#     )
-
-#     def __str__(self):
-#         return self.username
 
 
 # @python_2_unicode_compatible
@@ -66,21 +48,14 @@ class CommentAbstract(models.Model):
     #     on_delete=models.SET_NULL,
     # )
     user = models.ForeignKey(
+        # 'social.UserProfile',
         settings.AUTH_USER_MODEL,
-        verbose_name='User',
+        verbose_name='Profil',
         blank=True,
         null=True,
         related_name="%(class)s_comments",
         on_delete=models.SET_NULL,
     )
-    # user = models.ForeignKey(
-    #     'social.UserProfile',
-    #     verbose_name='user',
-    #     blank=True,
-    #     null=True,
-    #     related_name="%(class)s_comments",
-    #     on_delete=models.SET_NULL,
-    # )
     content = models.TextField(
         verbose_name='Commentaire',
         max_length=COMMENT_MAX_LENGTH,

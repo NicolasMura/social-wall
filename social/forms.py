@@ -62,13 +62,3 @@ class UserProfileForm(UserCreationForm):
     #         pass
 
     #     return avatar
-
-
-# class UserProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['email', 'username', 'avatar']
-
-#     # user_email = forms.EmailField(label="Votre nom d'utilisateur")
-#     # user_name = forms.CharField(label="Votre email", max_length=254)
-#     # avatar = forms.ImageField(label="Votre avatar")

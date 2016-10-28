@@ -23,15 +23,21 @@
 
     <div class="col-xs-12 top-post">
       <div class="row">
+        {% if user.is_authenticated %}
+          <div class="col-xs-2 col-sm-1">
+            <a href="{% url 'social:wall-user-view' user.username %}"><img class="wall-avatar" src="{{ user.avatar.url }}" width="50"></a>
+          </div>
+        {% else %}
         <div class="col-xs-2 col-sm-1">
-          <a href="{% url 'social:wall-user-view' user.username %}"><img class="wall-avatar" src="{% if user.is_authenticated %}{{ user.avatar.url }}{% else %}{% static 'avatars/default-avatar.png' %}{% endif %}" width="50"></a>
+          <img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50">
         </div>
+        {% endif %}
         <div class="col-xs-10 col-sm-11 post">
           <form action="" method="POST" role="form">
             {% csrf_token %}
             <fieldset {% if user.is_authenticated = False %}disabled{% endif %}>
               <div class="input-group"> 
-                <input type="text" class="form-control" id="" placeholder="{% if user.is_authenticated %}Exprimez-vous, {{ user.username }}{% else %}Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire{% endif %}">
+                <input type="text" class="form-control" id="" placeholder="{% if user.is_authenticated %}{% if False %}Soyez le premier à vous exprimer, {% else %}Exprimez-vous, {% endif %}{{ user.username }}{% else %}Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire{% endif %}">
                 <span class="input-group-btn">
                 <button type="submit" class="btn btn-primary">Envoyer</button>
                 </span>
