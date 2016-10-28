@@ -1,0 +1,185 @@
+from __future__ import unicode_literals  # utile ?
+
+from django.conf import settings
+from django.contrib.sites.models import Site  # utile ?
+from django.db import models
+from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible  # utile ?
+from django.utils.translation import ugettext_lazy as _
+
+# from .managers import CommentManager
+
+COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
+
+
+# @python_2_unicode_compatible
+class CommentAbstract(models.Model):
+    """
+    A user comment about some object.
+    """
+
+    # Who posted this comment? If ``user`` is set then it was an authenticated
+    # user; otherwise at least user_name should have been set and the comment
+    # was posted by a non-authenticated user.
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('user'),
+                             blank=True, null=True, related_name="%(class)s_comments",
+                             on_delete=models.SET_NULL)
+    user_name = models.CharField(_("user's name"), max_length=50, blank=True)
+    # Explicit `max_length` to apply both to Django 1.7 and 1.8+.
+    user_email = models.EmailField(_("user's email address"), max_length=254,
+                                   blank=True)
+    user_url = models.URLField(_("user's URL"), blank=True)
+
+    content = models.TextField(_('comment'), max_length=COMMENT_MAX_LENGTH)
+
+    # Metadata about the comment
+    submit_date = models.DateTimeField(_('date/time submitted'), default=None, db_index=True)
+    is_public = models.BooleanField(_('is public'), default=True,
+                                    help_text=_('Uncheck this box to make the comment effectively '
+                                                'disappear from the site.'))
+    is_removed = models.BooleanField(_('is removed'), default=False,
+                                     help_text=_('Check this box if the comment is inappropriate. '
+                                                 'A "This comment has been removed" message will '
+                                                 'be displayed instead.'))
+
+    # # Manager
+    # objects = CommentManager()
+
+    class Meta:
+        abstract = True
+        ordering = ('submit_date',)
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
+
+    def __str__(self):
+        return "%s: %s..." % (self.name, self.comment[:50])
+
+    def save(self, *args, **kwargs):
+        if self.submit_date is None:
+            self.submit_date = timezone.now()
+        super(CommentAbstract, self).save(*args, **kwargs)
+
+    def _get_userinfo(self):
+        """
+        Get a dictionary that pulls together information about the poster
+        safely for both authenticated and non-authenticated comments.
+        This dict will have ``name``, ``email``, and ``url`` fields.
+        """
+        if not hasattr(self, "_userinfo"):
+            userinfo = {
+                "name": self.user_name,
+                "email": self.user_email,
+                "url": self.user_url
+            }
+            if self.user_id:
+                u = self.user
+                if u.email:
+                    userinfo["email"] = u.email
+
+                # If the user has a full name, use that for the user name.
+                # However, a given user_name overrides the raw user.username,
+                # so only use that if this comment has no associated name.
+                if u.get_full_name():
+                    userinfo["name"] = self.user.get_full_name()
+                elif not self.user_name:
+                    userinfo["name"] = u.get_username()
+            self._userinfo = userinfo
+        return self._userinfo
+
+    userinfo = property(_get_userinfo, doc=_get_userinfo.__doc__)
+
+    def _get_name(self):
+        return self.userinfo["name"]
+
+    def _set_name(self, val):
+        if self.user_id:
+            raise AttributeError(_("This comment was posted by an authenticated "
+                                   "user and thus the name is read-only."))
+        self.user_name = val
+
+    name = property(_get_name, _set_name, doc="The name of the user who posted this comment")
+
+    def _get_email(self):
+        return self.userinfo["email"]
+
+    def _set_email(self, val):
+        if self.user_id:
+            raise AttributeError(_("This comment was posted by an authenticated "
+                                   "user and thus the email is read-only."))
+        self.user_email = val
+
+    email = property(_get_email, _set_email, doc="The email of the user who posted this comment")
+
+    def _get_url(self):
+        return self.userinfo["url"]
+
+    def _set_url(self, val):
+        self.user_url = val
+
+    url = property(_get_url, _set_url, doc="The URL given by the user who posted this comment")
+
+    def get_absolute_url(self, anchor_pattern="#c%(id)s"):
+        return self.get_content_object_url() + (anchor_pattern % self.__dict__)
+
+    def get_as_text(self):
+        """
+        Return this comment as plain text.  Useful for emails.
+        """
+        d = {
+            'user': self.user or self.name,
+            'date': self.submit_date,
+            'comment': self.comment,
+            'domain': self.site.domain,
+            'url': self.get_absolute_url()
+        }
+        return _('Posted by %(user)s at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s') % d
+
+
+class Comment(CommentAbstract):
+    class Meta(CommentAbstract.Meta):
+        db_table = "django_comments"
+
+
+# @python_2_unicode_compatible
+# class CommentFlag(models.Model):  # utile ?
+#     """
+#     Records a flag on a comment. This is intentionally flexible; right now, a
+#     flag could be:
+#         * A "removal suggestion" -- where a user suggests a comment for (potential) removal.
+#         * A "moderator deletion" -- used when a moderator deletes a comment.
+#     You can (ab)use this model to add other flags, if needed. However, by
+#     design users are only allowed to flag a comment with a given flag once;
+#     if you want rating look elsewhere.
+#     """
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, verbose_name=_('user'), related_name="comment_flags",
+#         on_delete=models.CASCADE,
+#     )
+#     comment = models.ForeignKey(
+#         # Translators: 'comment' is a noun here.
+#         Comment, verbose_name=_('comment'), related_name="flags", on_delete=models.CASCADE,
+#     )
+#     # Translators: 'flag' is a noun here.
+#     flag = models.CharField(_('flag'), max_length=30, db_index=True)
+#     flag_date = models.DateTimeField(_('date'), default=None)
+
+#     # Constants for flag types
+#     SUGGEST_REMOVAL = "removal suggestion"
+#     MODERATOR_DELETION = "moderator deletion"
+#     MODERATOR_APPROVAL = "moderator approval"
+
+#     class Meta:
+#         db_table = 'django_comment_flags'
+#         unique_together = [('user', 'comment', 'flag')]
+#         verbose_name = _('comment flag')
+#         verbose_name_plural = _('comment flags')
+
+#     def __str__(self):
+#         return "%s flag of comment ID %s by %s" % (
+#             self.flag, self.comment_id, self.user.get_username()
+#         )
+
+#     def save(self, *args, **kwargs):
+#         if self.flag_date is None:
+#             self.flag_date = timezone.now()
+# super(CommentFlag, self).save(*args, **kwargs)

@@ -1,0 +1,28 @@
+{% extends 'social/base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block retour %}{% endblock %}
+{% block content %}
+<h1>Connexion</h1>
+
+<div class="row">
+
+  <div class="col-xs-12">
+    <form method="post" action="{% url 'social:generic-login-view' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p>
+        <input type="submit" value="Se connecter" />
+        <!-- <input type="hidden" name="next" value="{# {% url 'social:wall-user-view' user.username %} #}" /> -->
+      </p>
+    </form>
+  </div>
+
+  <div class="col-xs-12">
+    <p>Pas encore de compte ? <a href="{% url 'social:generic-signup-view' %}">Inscrivez-vous</a>, c'est gratuit :)</p>
+  </div>
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends 'social/base.html' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block retour %}{% endblock %}
+{% block content %}
+<h1>Inscription</h1>
+
+<div class="row">
+
+  <div class="col-xs-12">
+    <form method="post" enctype="multipart/form-data" action="{% url 'social:generic-signup-view' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p>
+        <input type="submit" value="Je m'inscris !" />
+      </p>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
