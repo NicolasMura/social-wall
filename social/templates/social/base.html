@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="{% url 'social:wall-view' %}">OpenFaceRooms - The Wall</a>
+              <a class="navbar-brand" href="{% url 'social:wall-view' %}">OpenFaceRooms<span class="hidden-xs"> - The Wall</span></a>
             </div>
 
             <div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -92,5 +92,9 @@
     <script src="{% static 'js/jquery.js' %}"></script>
     <!-- Bootstrap JavaScript -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    {% block page_javascript %}
+    {% endblock page_javascript %}
+
   </body>
 </html>

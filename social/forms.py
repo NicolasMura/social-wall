@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals  # utile ?
 
-# from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile
-# from django import forms
+from .models import UserProfile, Post, Comment
+from django import forms
 # from django.core.files.images import get_image_dimensions
+from django.utils.html import strip_tags
 
 
 class UserProfileForm(UserCreationForm):
@@ -62,3 +62,43 @@ class UserProfileForm(UserCreationForm):
     #         pass
 
     #     return avatar
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['content', 'user']
+        widgets = {
+            'content': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'post-form-content-input',
+            }),
+        }
+
+    # Overwrite clean method to strip HTML tags
+    # def clean(self):
+
+    #     cleaned_data = super(PostForm, self).clean()
+    #     cleaned_data['content'] = strip_tags(cleaned_data.get('content'))
+    #     return cleaned_data
+
+    # def save(self):
+    #     post = super(PostForm, self).save(commit=False)
+    #     post.user = self.cleaned_data['user']
+
+    #     post.save()
+
+    #     return post
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content', 'user']
+        widgets = {
+            'content': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'post-comment-content-input',
+                'placeholder': 'Ajoutez un commentaire',
+            }),
+        }

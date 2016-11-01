@@ -21,6 +21,11 @@ urlpatterns = patterns(
     #     name='login_view',
     # ),
     url(
+        r'^post-create/$',
+        PostCreate.as_view(),
+        name='generic-post-create',
+    ),
+    url(
         # TO DO sur cette vue :
         # - rediriger vers le wall-user-view
         # - ajouter un message "Bonjour <user> !"
@@ -51,7 +56,7 @@ urlpatterns = patterns(
         name='generic-signup-view',
     ),
     url(
-        r'^user/(?P<username>.+)$',
+        r'^profile/(?P<username>.+)$',
         # r'^Nikouz/$',
         login_required(WallUserView.as_view()),
         name='wall-user-view',

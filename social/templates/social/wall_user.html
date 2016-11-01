@@ -5,206 +5,156 @@
 
 {% block retour %}{% endblock %}
 {% block content %}
-<h1>Bienvenue sur votre mur, {{ user.username }} !</h1>
+<h1>
+  <!-- Si wall_user = user -->
+  {% if True %}
+  Bienvenue sur votre mur, {{ user.username }} !
+  {% else %}
+  Vous êtes sur le mur de < wall_user >.
+  {% endif %}
+</h1>
 
 <div class="row">
 
   <!-- Si aucun commentaire sur ce mur -->
+  {% if user_posts.count = 0 %}
+  <!-- Si wall_user = user -->
   {% if True %}
-    <div class="col-xs-12">    
-      <p>Votre mur est vide : postez votre premier commentaire !</p>
-    </div>
+  <div class="col-xs-12">
+    <p>Le mur de < wall_user > est vide : écrivez-lui !</p>
+  </div>
+  {% else %}
+  <div class="col-xs-12">
+    <p>Votre mur est vide : postez votre premier commentaire !</p>
+  </div>
+  {% endif %}
   {% endif %}
 
-    <div class="col-xs-12 top-post">
-      <div class="row">
-        <div class="col-xs-2 col-sm-1">
-          <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
-        </div>
-        <div class="col-xs-10 col-sm-11 post">
-          <form action="" method="POST" role="form">
-            {% csrf_token %}
-            <div class="input-group">
-              <input type="text" class="form-control" id="" placeholder="Exprimez-vous, {{ user.username }}">
-              <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">Envoyer</button>
-              </span>
-            </div>
-          </form>        
-        </div>
+  <div class="col-xs-12 top-post">
+    <div class="row">
+      <div class="col-xs-2 col-sm-1 text-center">
+        <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+      </div>
+      <div class="col-xs-10 col-sm-11 post">
+        <form action="{# {% url 'generic-post-create' %} #}" method="POST" role="form">
+          {% if post_form.errors.content %}  
+          <div class="alert alert-danger">
+            <strong>{{ post_form.errors.content|escape }}</strong>
+          </div>
+          {% endif %}
+          {% csrf_token %}
+          <div class="input-group">
+            {{ post_form.content }}
+            {# {{ post_form.content|safe }} #}
+            <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
+            <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+            </span>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
 
   <!-- Si aucun commentaire sur ce mur -->
-  {% if True %}
+  {% if user_posts.count != 0 %}
 
-  {% else %}
+  <div class="col-xs-12" style="margin-top:20px;">    
+    <h2>Derniers posts publiés sur votre mur</h2>
+  </div>
 
-    <div class="col-xs-12" style="margin-top:20px">    
-      <h2>Derniers posts publiés sur votre mur</h2>
-    </div>
+  {% for post in user_posts %}
 
-    <div class="col-xs-12 block-infos">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2 col-md-1">
-          <a href="#"><img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50"></a>
-        </div>
-        <div class="col-xs-9 col-sm-10 col-md-11 infos-user">
-          <a class="username" href="#"><b>< Nom_user_connected ></b></a>
-          <p>9 octobre 2016 12:39</p>
-        </div>
+  <!-- POST BLOCK -->
+  <div class="col-xs-12 block-infos">
+    <div class="row">
+      <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+        <img class="wall-avatar" src="{{ post.user.avatar.url }}" width="50">
+      </div>
+      <div class="col-xs-10 col-sm-11 col-md-11 infos-user" style="padding-left: 20px;">
+        <a class="username" href="{% url 'social:wall-user-view' post.user.username %}"><b>{{ post.user }}</b></a>
+        <p><i>{{ post.submit_date }}</i></p>
       </div>
     </div>
-    <div class="col-xs-12">
-      <p>Vous avez vu cette nouvelle techno ? http://www.nicolasmura.fr</p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <form action="" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" id="" placeholder="Ajoutez un commentaire">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">Envoyer</button>
-          </span>
-        </div>
-      </form>        
-    </div>
+  </div>
+  <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
+    <p>{{ post.content }}</p>
+  </div>
 
-    <div class="col-xs-12 block-infos">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2 col-md-1">
-          <a href="#"><img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50"></a>
-        </div>
-        <div class="col-xs-9 col-sm-10 col-md-11 infos-user">
-          <a class="username" href="#"><b>< Nom_autre_user_1 ></b></a>
-          <p>9 octobre 2016 12:39</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12">
-      <p>J'adore les réseaux sociaux</p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <form action="" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" id="" placeholder="Ajoutez un commentaire">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">Envoyer</button>
-          </span>
-        </div>
-      </form>        
-    </div>
+  <div class="col-xs-12 comments-block-container">
+    <div class="row">
+      
+      <!-- COMMENTS BLOCK -->
+      <div class="col-xs-12 comments-block">
+        <div class="row">
     
-    <div class="col-xs-12 block-infos">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2 col-md-1">
-          <a href="#"><img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50"></a>
-        </div>
-        <div class="col-xs-9 col-sm-10 col-md-11 infos-user">
-          <a class="username" href="#"><b>< Nom_user_connected ></b></a>
-          <p>9 octobre 2016 12:39</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12">
-      <p>Vous avez vu cette nouvelle techno ? http://www.nicolasmura.fr</p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Ouais, c'est cool.</p>
-      <p class="reply-to-post-date"><i>Il y a 3 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p class="reply-to-post-date"><i>Il y a 5 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <form action="" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" id="" placeholder="Ajoutez un commentaire">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">Envoyer</button>
-          </span>
-        </div>
-      </form>        
-    </div>
+          {% if post.comments.count > 0 %}
+          <p><i class="fa fa-comment" aria-hidden="true"></i> {{ post.comments.count }} commentaire{% if post.comments.count > 1 %}s{% endif %}</p>
+          {% endif %}
 
-    <div class="col-xs-12 block-infos">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2 col-md-1">
-          <a href="#"><img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50"></a>
-        </div>
-        <div class="col-xs-9 col-sm-10 col-md-11 infos-user">
-          <a class="username" href="#"><b>< Nom_autre_user_1 ></b></a> <i class="fa fa-arrow-right"></i> <a class="username" href="#"><b>< Nom_user_connected ></b></a>
-          <p>9 octobre 2016 12:39</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12">
-      <p>Vous avez vu cette nouvelle techno ? http://www.nicolasmura.fr</p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Ouais, c'est cool.</p>
-      <p class="reply-to-post-date"><i>Il y a 3 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Carrément.</p>
-      <p class="reply-to-post-date"><i>Il y a 5 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <form action="" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" id="" placeholder="Ajoutez un commentaire">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">Envoyer</button>
-          </span>
-        </div>
-      </form>        
-    </div>
+          {% for comment in post.comments.all %} 
+          <!-- COMMENTS -->
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+                {% if comment.user = user %}
+                <img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35">
+                {% else %}
+                <a href="#"><img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35"></a>
+                {% endif %}
+              </div>
+              <div class="col-xs-10 col-sm-11 col-md-11">
+                {% if comment.user = user %}
+                <b>{{ comment.user }}</b>
+                {% else %}
+                <a class="username" href="#"><b>{{ comment.user }}</b></a>
+                {% endif %}
+                <p><i>{{ comment.submit_date }}</i></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
+                <p>{{ comment.content }}</p>
+              </div>
+            </div>
+          </div>
+          <!-- END COMMENTS -->
+          {% endfor %}
 
-    <div class="col-xs-12 block-infos">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2 col-md-1">
-          <a href="#"><img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50"></a>
-        </div>
-        <div class="col-xs-9 col-sm-10 col-md-11 infos-user">
-          <a class="username" href="#"><b>< Nom_autre_user_1 ></b></a> <i class="fa fa-arrow-right"></i> <a class="username" href="#"><b>< Nom_autre_user_2 ></b></a>
-          <p>9 octobre 2016 12:39</p>
+          <!-- COMMENT FORM -->
+          <div class="col-xs-12">
+            <form action="" method="POST" role="form">
+              {% csrf_token %}
+              <div class="input-group">
+                <!-- <input type="text" class="form-control" name="test" id="" placeholder="Ajoutez un commentaire"> -->
+                {{ comment_form.content }}
+                {# {{ comment_form.content|safe }} #}
+                <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
+                <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+                </span>
+              </div>
+            </form>
+          </div>
+          <!-- END COMMENT FORM -->
         </div>
       </div>
+      <!-- END COMMENTS BLOCK -->
+
     </div>
-    <div class="col-xs-12">
-      <p>Vous avez vu cette nouvelle techno ? http://www.nicolasmura.fr</p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Ouais, c'est cool.</p>
-      <p class="reply-to-post-date"><i>Il y a 3 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <p><b>< Nom reply-user ></b> : Carrément.</p>
-      <p class="reply-to-post-date"><i>Il y a 5 minutes</i></p>
-    </div>
-    <div class="col-xs-12 reply-to-post">
-      <form action="" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" id="" placeholder="Ajoutez un commentaire">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">Envoyer</button>
-          </span>
-        </div>
-      </form>        
-    </div>
+  </div>
+
+  {% endfor %}
 
   {% endif %}
 
 </div>
 {% endblock %}
 
+{% block page_javascript %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#post-form-content-input').attr("placeholder", "Exprimez-vous, {{ user.username }}");
+    })
+  </script>
+{% endblock page_javascript %}

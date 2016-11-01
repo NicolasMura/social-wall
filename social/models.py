@@ -11,8 +11,8 @@ COMMENT_MAX_LENGTH = 3000
 
 class UserProfile(AbstractUser):
     class Meta:
-        verbose_name = 'Profil'
-        verbose_name_plural = 'Profils'
+        verbose_name = 'Profil utilisateur'
+        verbose_name_plural = 'Profils utilisateurs'
 
     avatar = models.FileField(
         verbose_name="Votre avatar",
@@ -27,9 +27,9 @@ class UserProfile(AbstractUser):
 
 
 # @python_2_unicode_compatible
-class CommentAbstract(models.Model):
+class PostCommentAbstract(models.Model):
     """
-    A user comment about some object.
+    A user post/comment about some object.
     """
 
     class Meta:
@@ -56,9 +56,11 @@ class CommentAbstract(models.Model):
         related_name="%(class)s_comments",
         on_delete=models.SET_NULL,
     )
-    content = models.TextField(
+    content = models.CharField(
         verbose_name='Commentaire',
         max_length=COMMENT_MAX_LENGTH,
+        null=False,
+        blank=False,
     )
 
     # Metadata about the comment
@@ -82,7 +84,7 @@ class CommentAbstract(models.Model):
     )
 
     def __str__(self):
-        return "%s: %s..." % (self.profile, self.comment[:50])
+        return "%s: %s..." % (self.user, self.content[:50])
 
     # def __str__(self):
     #     return "Commentaire {0}".format(self.content)
@@ -104,6 +106,28 @@ class CommentAbstract(models.Model):
         'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s' % d
 
 
-class Comment(CommentAbstract):
+class Post(PostCommentAbstract):
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+
+    comments = models.ManyToManyField(
+        'social.Comment',
+        verbose_name='Commentaires relatifs',
+        related_name='comments',
+    )
+
+
+class Comment(PostCommentAbstract):
     class Meta:
         verbose_name = 'Commentaire'
+        verbose_name_plural = 'Commentaires'
+
+    # post = models.ForeignKey(
+    #     'social.Post',
+    #     verbose_name='Post relatif',
+    #     blank=True,
+    #     null=True,
+    #     related_name="%(class)s_comments",
+    #     on_delete=models.SET_NULL,
+    #     )

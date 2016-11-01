@@ -11,7 +11,7 @@ from django_comments.views.moderation import (
     perform_approve, perform_delete
 )
 
-from .models import UserProfile, Comment
+from .models import UserProfile, Post, Comment
 
 
 def moderer_comments(modeladmin, request, queryset):
@@ -35,10 +35,10 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class CommentInline(admin.TabularInline):
-    model = Comment
+    model = Post
 
 
-class CommentAdmin(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     fieldsets = (
         # (
         #     None,
@@ -47,8 +47,7 @@ class CommentAdmin(admin.ModelAdmin):
         # ),
         (
             _('Content'),
-            # {'fields': ('user', 'user_name', 'user_email', 'comment')}
-            {'fields': ('user', 'content')}
+            {'fields': ('user', 'content', 'comments')}
         ),
         (
             _('Metadata'),
@@ -66,23 +65,23 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('submit_date', 'is_public', 'is_removed')
     date_hierarchy = 'submit_date'
     ordering = ('-submit_date',)
-    raw_id_fields = ('user',)
-    search_fields = ('comment', 'user', 'email')
+    # raw_id_fields = ('user',)
+    search_fields = ('content', 'user', 'email')
     actions = ["approve_comments", "remove_comments"]
 
-    def preview(self, comment):
-        if len(comment.content) > 50:
-            return "{}...".format(comment.content[:50])
+    def preview(self, post):
+        if len(post.content) > 50:
+            return "{}...".format(post.content[:50])
 
-        return comment.content
+        return post.content
 
-    preview.short_description = 'Aperçu du commentaire'
+    preview.short_description = 'Aperçu du post'
 
     # Actions personnalisées
     actions = [moderer_comments]
 
     def get_actions(self, request):
-        actions = super(CommentAdmin, self).get_actions(request)
+        actions = super(PostAdmin, self).get_actions(request)
         # Only superusers should be able to delete the comments from the DB.
         if not request.user.is_superuser and 'delete_selected' in actions:
             actions.pop('delete_selected')
@@ -129,5 +128,41 @@ class CommentAdmin(admin.ModelAdmin):
             'action': done_message(n_comments),
             })
 
+
+class CommentAdmin(admin.ModelAdmin):
+    fieldsets = (
+        # (
+        #     None,
+        #     {'fields': ('content_type', 'object_pk', 'site')}
+        #     {'fields': ('content_type', 'object_pk', 'site')}
+        # ),
+        (
+            _('Content'),
+            # {'fields': ('user', 'user_name', 'user_email', 'comment')}
+            {'fields': ('user', 'content')}
+        ),
+        (
+            _('Metadata'),
+            {'fields': ('is_public', 'is_removed')}
+        ),
+    )
+
+    list_display = (
+        'user',
+        'submit_date',
+        'preview',
+        'is_public',
+        'is_removed',
+    )
+
+    def preview(self, comment):
+        if len(comment.content) > 50:
+            return "{}...".format(comment.content[:50])
+
+        return comment.content
+
+    preview.short_description = 'Aperçu du commentaire'
+
+admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
