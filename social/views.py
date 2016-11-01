@@ -4,7 +4,6 @@ from django.shortcuts import render
 # from django.shortcuts import redirect
 from django.views.generic import View, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
-# from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from .models import Profile, Post
 from .forms import ProfileForm
@@ -100,34 +99,6 @@ class WallProfileView(AppView):
     template_name = "social/wall_profile.html"
 
     def get(self, request, profile):
-        # # Get post form
-        # post_form = PostForm()
-
-        # # Get comment forms
-        # comment_form = CommentForm()
-
-        # # Get all user's posts & associated comments
-        # user_posts = []
-        # # post_dict = {}
-        # user_posts = Post.objects.filter(
-        #     user=request.user.id).order_by('-submit_date')
-
-        # # for post in user_posts_list:
-        # #     post_dict['content'] = post
-        # #     comments = post.comments.all()
-        # #     post_dict['comments'] = comments
-        # #     user_posts.append(post_dict)
-        # #     print(user_posts)
-
-        # # Update context
-        # self.context.update({
-        #     'post_form': post_form,
-        #     'comment_form': comment_form,
-        #     # 'user_posts': user_posts,
-        #     'user_posts': user_posts,
-        # })
-
-        print("User : ", self.request.user)
         profile = Profile.objects.get(username=profile)
 
         wall_profile = get_wall_profile(
@@ -138,14 +109,6 @@ class WallProfileView(AppView):
         return render(request, self.template_name, self.context)
 
     def post(self, request, profile):
-        # # Get all user's posts
-        # user_posts = Post.objects.filter(
-        #     user=request.user.id).order_by('-submit_date')
-
-        # # Update context
-        # self.context.update({
-        #     'user_posts': user_posts,
-        # })
         # # Save user's post if valid
         # post_form = PostForm(request.POST)
         # if post_form.is_valid():
@@ -170,12 +133,17 @@ class WallProfileView(AppView):
 
         wall_profile = get_wall_profile(
                 profile=profile)
-        wall_profile.save_user_post(request=request)
+
+        if 'submit-user-post' in self.request.POST:
+            print("POST submit-user-post")
+            wall_profile.process_user_post(request=request)
+        if 'submit-user-comment' in self.request.POST:
+            print("POST submit-user-comment")
+            wall_profile.process_user_comment(request=request)
         self.context.update({
-            'wall_profile': get_wall_profile(
-                profile=profile),
-            'post_form': wall_profile.post_form,
+            'wall_profile': wall_profile,
         })
+        print("Erreurs : ", wall_profile.user_comment_form.errors)
 
         return render(request, self.template_name, self.context)
 

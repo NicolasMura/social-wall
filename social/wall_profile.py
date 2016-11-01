@@ -20,21 +20,15 @@ class WallProfile(object):
         self.profile_posts = Post.objects.filter(
             user=self.profile).order_by('-submit_date')
 
-    def save_user_post(self, request):
-        # Get all user's posts
-        # profile_posts = Post.objects.filter(
-        #     user=self.user).order_by('-submit_date')
-
-        # # Update context
-        # self.context.update({
-        #     'profile_posts': profile_posts,
-        # })
-        # Save user's post if valid
-        self.post_form = PostForm(request.POST)
-        if self.post_form.is_valid():
-            self.post_form.save()
+    def process_user_post(self, request):
+        """
+        Save user's post if valid, else return form with errors.
+        """
+        self.user_post_form = PostForm(request.POST)
+        if self.user_post_form.is_valid():
+            self.user_post_form.save()
             # Clean form and update context
-            self.post_form = PostForm()
+            self.user_post_form = PostForm()
             # Add success message
             messages.add_message(
                 request,
@@ -42,4 +36,22 @@ class WallProfile(object):
                 'Votre message a été publié !'
             )
         else:
-            self.post_form = self.post_form
+            self.user_post_form = self.user_post_form
+
+    def process_user_comment(self, request):
+        """
+        Save user's comment if valid, else return form with errors.
+        """
+        self.user_comment_form = CommentForm(request.POST)
+        if self.user_comment_form.is_valid():
+            self.user_comment_form.save()
+            # Clean form and update context
+            self.user_comment_form = CommentForm()
+            # Add success message
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Votre commentaire a été publié !'
+            )
+        else:
+            self.user_comment_form = self.user_comment_form

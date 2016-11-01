@@ -37,7 +37,7 @@
       </div>
       <div class="col-xs-10 col-sm-11 post">
         <form action="" method="POST" role="form">
-          {% if wall_profile.user_post_form.errors.content %}  
+          {% if wall_profile.user_post_form.errors.content %}
           <div class="alert alert-danger">
             <strong>{{ wall_profile.user_post_form.errors.content|escape }}</strong>
           </div>
@@ -48,7 +48,7 @@
             {# {{ user_post_form.content|safe }} #}
             <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
             <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
             </span>
           </div>
         </form>
@@ -135,6 +135,12 @@
           <!-- COMMENT FORM -->
           <div class="col-xs-12">
             <form action="" method="POST" role="form">
+              {% if wall_profile.user_comment_form.errors.content %}
+              <div class="alert alert-danger">
+                <strong>{{ wall_profile.user_comment_form.errors.content|escape }}</strong>
+              </div>
+              {% endif %}
+
               {% csrf_token %}
               <div class="input-group">
                 <!-- <input type="text" class="form-control" name="test" id="" placeholder="Ajoutez un commentaire"> -->
@@ -142,7 +148,7 @@
                 {# {{ user_comment_form.content|safe }} #}
                 <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
                 <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary">Envoyer</button>
+                <button type="submit" class="btn btn-primary" name="submit-user-comment">Envoyer</button>
                 </span>
               </div>
             </form>
