@@ -25,7 +25,7 @@
       <div class="row">
         {% if user.is_authenticated %}
           <div class="col-xs-2 col-sm-1">
-            <a href="{% url 'social:wall-user-view' user.username %}"><img class="wall-avatar" src="{{ user.avatar.url }}" width="50"></a>
+            <a href="{% url 'social:wall-profile-view' user.username %}"><img class="wall-avatar" src="{{ user.avatar.url }}" width="50"></a>
           </div>
         {% else %}
         <div class="col-xs-2 col-sm-1">

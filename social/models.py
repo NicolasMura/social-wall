@@ -9,7 +9,7 @@ from django.contrib.auth.models import AbstractUser
 COMMENT_MAX_LENGTH = 3000
 
 
-class UserProfile(AbstractUser):
+class Profile(AbstractUser):
     class Meta:
         verbose_name = 'Profil utilisateur'
         verbose_name_plural = 'Profils utilisateurs'
@@ -48,11 +48,11 @@ class PostCommentAbstract(models.Model):
     #     on_delete=models.SET_NULL,
     # )
     user = models.ForeignKey(
-        # 'social.UserProfile',
         settings.AUTH_USER_MODEL,
         verbose_name='Profil',
         blank=True,
         null=True,
+        # related_name="%(class)s_comments",
         related_name="%(class)s_comments",
         on_delete=models.SET_NULL,
     )

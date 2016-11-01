@@ -33,6 +33,8 @@ urlpatterns = patterns(
         auth_views.login,
         {'template_name': 'social/login.html'},
         name='generic-login-view',
+        # To try in Django 1.10 :
+        # redirect_authenticated_user=...
     ),
     # url(
     #     r'^/logout/$',
@@ -56,9 +58,9 @@ urlpatterns = patterns(
         name='generic-signup-view',
     ),
     url(
-        r'^profile/(?P<username>.+)$',
+        r'^profile/(?P<profile>.+)$',
         # r'^Nikouz/$',
-        login_required(WallUserView.as_view()),
-        name='wall-user-view',
+        login_required(WallProfileView.as_view()),
+        name='wall-profile-view',
     ),
 )

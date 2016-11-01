@@ -6,12 +6,11 @@ from django.views.generic import View, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 # from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
-from .models import Post
-from .forms import UserProfileForm, PostForm, CommentForm
+from .models import Profile, Post
+from .forms import ProfileForm
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 
-from .wall_user import get_wall_user
+from .wall_profile import get_wall_profile
 
 
 class AppView(View):
@@ -52,9 +51,9 @@ class WallView(AppView):
 #     """
 
 #     form_class = PostForm
-#     template_name = "social/wall_user.html"
+#     template_name = "social/wall_profile.html"
 #     success_url = reverse_lazy(
-#         'social:wall-user-view',
+#         'social:wall-profile-view',
 #         kwargs={'username': '%(username)s'},
 #     )
 #     # context_object_name = 'post_form'  # Marche pas...
@@ -94,69 +93,89 @@ class WallView(AppView):
 #     #     return render(request, self.template_name, self.context)
 
 
-class WallUserView(AppView):
+class WallProfileView(AppView):
     """
     A DOCUMENTER
     """
-    template_name = "social/wall_user.html"
+    template_name = "social/wall_profile.html"
 
-    def get(self, request, username):
-        # Get post form
-        post_form = PostForm()
+    def get(self, request, profile):
+        # # Get post form
+        # post_form = PostForm()
 
-        # Get comment forms
-        comment_form = CommentForm()
+        # # Get comment forms
+        # comment_form = CommentForm()
 
-        # Get all user's posts & associated comments
-        user_posts = []
-        # post_dict = {}
-        user_posts = Post.objects.filter(
-            user=request.user.id).order_by('-submit_date')
+        # # Get all user's posts & associated comments
+        # user_posts = []
+        # # post_dict = {}
+        # user_posts = Post.objects.filter(
+        #     user=request.user.id).order_by('-submit_date')
 
-        # for post in user_posts_list:
-        #     post_dict['content'] = post
-        #     comments = post.comments.all()
-        #     post_dict['comments'] = comments
-        #     user_posts.append(post_dict)
-        #     print(user_posts)
+        # # for post in user_posts_list:
+        # #     post_dict['content'] = post
+        # #     comments = post.comments.all()
+        # #     post_dict['comments'] = comments
+        # #     user_posts.append(post_dict)
+        # #     print(user_posts)
 
-        # Update context
+        # # Update context
+        # self.context.update({
+        #     'post_form': post_form,
+        #     'comment_form': comment_form,
+        #     # 'user_posts': user_posts,
+        #     'user_posts': user_posts,
+        # })
+
+        print("User : ", self.request.user)
+        profile = Profile.objects.get(username=profile)
+
+        wall_profile = get_wall_profile(
+                profile=profile)
         self.context.update({
-            'post_form': post_form,
-            'comment_form': comment_form,
-            # 'user_posts': user_posts,
-            'user_posts': user_posts,
+            'wall_profile': wall_profile
         })
         return render(request, self.template_name, self.context)
 
-    def post(self, request, username):
-        # Get all user's posts
-        user_posts = Post.objects.filter(
-            user=request.user.id).order_by('-submit_date')
+    def post(self, request, profile):
+        # # Get all user's posts
+        # user_posts = Post.objects.filter(
+        #     user=request.user.id).order_by('-submit_date')
 
-        # Update context
+        # # Update context
+        # self.context.update({
+        #     'user_posts': user_posts,
+        # })
+        # # Save user's post if valid
+        # post_form = PostForm(request.POST)
+        # if post_form.is_valid():
+        #     post_form.save()
+        #     # Clean form and update context
+        #     post_form = PostForm()
+        #     self.context.update({
+        #         'post_form': post_form,
+        #     })
+        #     # Add success message
+        #     messages.add_message(
+        #         request,
+        #         messages.SUCCESS,
+        #         'Votre message a été publié !'
+        #     )
+        # else:
+        #     self.context.update({
+        #         'post_form': post_form,
+        #     })
+
+        profile = Profile.objects.get(username=profile)
+
+        wall_profile = get_wall_profile(
+                profile=profile)
+        wall_profile.save_user_post(request=request)
         self.context.update({
-            'user_posts': user_posts,
+            'wall_profile': get_wall_profile(
+                profile=profile),
+            'post_form': wall_profile.post_form,
         })
-        # Save user's post if valid
-        post_form = PostForm(request.POST)
-        if post_form.is_valid():
-            post_form.save()
-            # Clean form and update context
-            post_form = PostForm()
-            self.context.update({
-                'post_form': post_form,
-            })
-            # Add success message
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                'Votre message a été publié !'
-            )
-        else:
-            self.context.update({
-                'post_form': post_form,
-            })
 
         return render(request, self.template_name, self.context)
 
@@ -210,12 +229,12 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
     Needs to overwrite form_valid method to save avatar.
     """
 
-    model = UserProfileForm
+    model = ProfileForm
     template_name = 'social/signup.html'
-    form_class = UserProfileForm
+    form_class = ProfileForm
     success_url = reverse_lazy(
-        'social:wall-user-view',
-        kwargs={'username': '%(username)s'},
+        'social:wall-profile-view',
+        kwargs={'profile': '%(username)s'},
     )
     success_message = _(
         'Vous êtes désormais inscrit(e) '

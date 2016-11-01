@@ -11,7 +11,7 @@ from django_comments.views.moderation import (
     perform_approve, perform_delete
 )
 
-from .models import UserProfile, Post, Comment
+from .models import Profile, Post, Comment
 
 
 def moderer_comments(modeladmin, request, queryset):
@@ -23,7 +23,7 @@ def moderer_comments(modeladmin, request, queryset):
 moderer_comments.short_description = "Modérer les commentaires sélectionnés"
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(admin.ModelAdmin):
         list_display = ('username', )
         search_fields = ('username', 'email', )
         can_delete = False
@@ -165,4 +165,4 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Profile, ProfileAdmin)

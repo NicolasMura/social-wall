@@ -47,7 +47,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="nav-avatar" src="{{ user.avatar.url }}" width="20"> {{ user.username }} <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="{% url 'social:wall-view' %}">Fil d'actualités</a></li>
-                    <li><a href="{% url 'social:wall-user-view' user.username %}">Mon mur</a></li>
+                    <li><a href="{% url 'social:wall-profile-view' user.username %}">Mon mur</a></li>
                     <li><a href="{% url 'social:generic-logout' %}">Déconnexion</a></li>
                   </ul>
                 </li>

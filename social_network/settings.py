@@ -123,7 +123,7 @@ STATICFILES_DIRS = (
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static/')
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-AUTH_USER_MODEL = 'social.UserProfile'
+AUTH_USER_MODEL = 'social.Profile'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
