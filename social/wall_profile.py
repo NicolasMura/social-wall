@@ -18,7 +18,7 @@ class WallProfile(object):
         self.user_comment_form = CommentForm()
         # Get all user's posts & associated comments
         self.profile_posts = Post.objects.filter(
-            user=self.profile).order_by('-submit_date')
+            wall_profile=self.profile).order_by('-submit_date')
 
     def process_user_post(self, request):
         """
@@ -27,6 +27,8 @@ class WallProfile(object):
         self.user_post_form = PostForm(request.POST)
         if self.user_post_form.is_valid():
             self.user_post_form.save()
+            # post = self.user_post_form.save(commit=False)
+            # post.user = 
             # Clean form and update context
             self.user_post_form = PostForm()
             # Add success message

@@ -67,7 +67,7 @@ class ProfileForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['content', 'user']
+        fields = ['content', 'user', 'wall_profile']
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',

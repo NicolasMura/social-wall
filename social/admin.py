@@ -58,6 +58,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'submit_date',
+        'wall_profile',
         'preview',
         'is_public',
         'is_removed',

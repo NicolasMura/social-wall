@@ -5,8 +5,42 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
+# from django.core.exceptions import ValidationError
 
-COMMENT_MAX_LENGTH = 3000
+COMMENT_MAX_LENGTH = 1000
+VALID_IMG_EXTENSIONS = [
+        ".jpg",
+        ".jpeg",
+        '.png',
+        ".gif",
+    ]
+MEGABYTE_LIMIT = 2
+MAX_WIDTH = 1920
+MAX_HEIGHT = 1080
+
+
+# def validate_image(
+#         fieldfile_obj,
+#         max_width=MAX_WIDTH,
+#         max_height=MAX_HEIGHT,
+#         max_size=MEGABYTE_LIMIT*1024*1024,
+#         valid_extensions=VALID_IMG_EXTENSIONS):
+#     if fieldfile_obj.file is None or fieldfile_obj.file.image is None:
+#         raise ValidationError("Erreur : fichier absent.")
+#     if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
+#         raise ValidationError(
+#             "Erreur : le format de l'image est incorrect ! "
+#             "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS))
+#     if (
+#         fieldfile_obj.file.image.width > max_width or
+#         fieldfile_obj.file.image.height > max_height
+#     ):
+#         raise ValidationError(
+#             "Erreur : l'image n'est pas au format autorisé (600 x 174 px).")
+#     if fieldfile_obj.file.image.size > max_size:
+#         raise ValidationError(
+#             "L'image dépasse la taille maximale "
+#             "autorisée ({} Mo)".format(MEGABYTE_LIMIT))
 
 
 class Profile(AbstractUser):
@@ -16,10 +50,11 @@ class Profile(AbstractUser):
 
     avatar = models.FileField(
         verbose_name="Votre avatar",
-        # null=True,
         blank=True,
+        null=False,
         upload_to='upload/avatars',
-        default='upload/avatars/default-avatar.png'
+        default='upload/avatars/default-avatar.png',
+        # validators=[validate_image],
     )
 
     def __str__(self):
@@ -49,17 +84,17 @@ class PostCommentAbstract(models.Model):
     # )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='Profil',
-        blank=True,
-        null=True,
+        verbose_name='Auteur',
+        blank=False,
+        null=False,
         # related_name="%(class)s_comments",
         related_name="%(class)s_comments",
-        on_delete=models.SET_NULL,
+        # on_delete=models.SET_NULL,
     )
     content = models.CharField(
         verbose_name='Commentaire',
         max_length=COMMENT_MAX_LENGTH,
-        null=False,
+        default="",
         blank=False,
     )
 
@@ -115,6 +150,14 @@ class Post(PostCommentAbstract):
         'social.Comment',
         verbose_name='Commentaires relatifs',
         related_name='comments',
+    )
+    wall_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name='Mur sur lequel le post a été publié',
+        blank=False,
+        null=False,
+        # related_name="%(class)s_comments",
+        related_name="wall_profile",
     )
 
 

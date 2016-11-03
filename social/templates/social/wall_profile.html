@@ -47,6 +47,7 @@
             {{ wall_profile.user_post_form.content }}
             {# {{ user_post_form.content|safe }} #}
             <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
+            <input type="hidden" class="form-control" id="wall_profile" name="wall_profile" value="{{ wall_profile.profile.id }}">
             <span class="input-group-btn">
             <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
             </span>
@@ -59,7 +60,7 @@
   <!-- Si aucun post sur ce mur -->
   {% if wall_profile.profile_posts.count != 0 %}
 
-  <div class="col-xs-12" style="margin-top:20px;">    
+  <div class="col-xs-12">    
     <!-- Si wall_profile = user -->
     {% if wall_profile.profile = user %}
     <h2>Derniers posts publiés sur votre mur</h2>
@@ -74,14 +75,21 @@
   <div class="col-xs-12 block-infos">
     <div class="row">
       <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+        {# Si le profil du mur affiché est l'auteur du post #}
+        {% if post.wall_profile = post.user %}
         <img class="wall-avatar" src="{{ post.user.avatar.url }}" width="50">
-      </div>
-      <div class="col-xs-10 col-sm-11 col-md-11 infos-user" style="padding-left: 20px;">
-        <!-- Si user est l'auteur du post -->
-        {% if post.user = user %}
-        <b>{{ post.user }}</b>
         {% else %}
-        <a class="username" href="{% url 'social:wall-profile-view' post.user.username %}"><b>{{ post.user }}</b></a>
+        <a class="username" href="{% url 'social:wall-profile-view' post.user %}">
+          <img class="wall-avatar" src="{{ post.user.avatar.url }}" width="50">
+        </a>
+        {% endif %}
+      </div>
+      <div class="col-xs-10 col-sm-11 col-md-11 infos-user">
+        {# Si le profil du mur affiché est l'auteur du post #}
+        {% if post.wall_profile = post.user %}
+        <b>{{ post.wall_profile }}</b>
+        {% else %}
+        <b><a class="username" href="{% url 'social:wall-profile-view' post.user %}">{{ post.user }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post.wall_profile }}</b>
         {% endif %}
         <p><i>{{ post.submit_date }}</i></p>
       </div>
@@ -105,17 +113,20 @@
           <!-- COMMENTS -->
           <div class="col-xs-12">
             <div class="row">
+              
+             {# !!! il faut que < comment.user > soit un lien s'il est différent de July (ie différent de < wall_user.profile >) !!! #}
+
               <div class="col-xs-2 col-sm-1 col-md-1 text-center">
-                <!-- Si user est l'auteur du commentaire -->
-                {% if comment.user = user %}
+                {# Si l'utilisateur connecté est l'auteur du commentaire #}
+                {% if comment.user = wall_profile.profile %}
                 <img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35">
                 {% else %}
                 <a href="{% url 'social:wall-profile-view' comment.user.username %}"><img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35"></a>
                 {% endif %}
               </div>
               <div class="col-xs-10 col-sm-11 col-md-11">
-                <!-- Si user est l'auteur du commentaire -->
-                {% if comment.user = user %}
+                {# l'utilisateur connecté user est l'auteur du commentaire #}
+                {% if comment.user = wall_profile.profile %}
                 <b>{{ comment.user }}</b>
                 {% else %}
                 <a class="username" href="{% url 'social:wall-profile-view' comment.user.username %}"><b>{{ comment.user }}</b></a>
@@ -143,7 +154,6 @@
 
               {% csrf_token %}
               <div class="input-group">
-                <!-- <input type="text" class="form-control" name="test" id="" placeholder="Ajoutez un commentaire"> -->
                 {{ wall_profile.user_comment_form.content }}
                 {# {{ user_comment_form.content|safe }} #}
                 <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
@@ -171,7 +181,7 @@
 {% block page_javascript %}
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#post-form-content-input').attr("placeholder", {% if wall_profile.profile = user %}"Exprimez-vous, {{ user.username }}"{% else %}"Ecrivez quelque chose à {{ wall_profile.profile.username }}..."{% endif %});
+      $('#post-form-content-input').attr("placeholder", {% if wall_profile.profile = user %}"Exprimez-vous, {{ user.username }}"{% else %}"Écrivez quelque chose à {{ wall_profile.profile.username }}..."{% endif %});
     })
   </script>
 {% endblock page_javascript %}

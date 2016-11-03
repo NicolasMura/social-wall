@@ -200,10 +200,15 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
     model = ProfileForm
     template_name = 'social/signup.html'
     form_class = ProfileForm
+    # Redirection to user's wall doesn't work - To correct :
+    # success_url = reverse_lazy(
+    #     'social:wall-profile-view',
+    #     kwargs={'profile': '%(username)s'},
+    # )
     success_url = reverse_lazy(
-        'social:wall-profile-view',
-        kwargs={'profile': '%(username)s'},
+        'social:wall-view',
     )
+    # print(success_url)
     success_message = _(
         'Vous êtes désormais inscrit(e) '
         'sur OpenFaceRoom, %(username)s !')

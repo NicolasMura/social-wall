@@ -59,6 +59,7 @@ urlpatterns = patterns(
     ),
     url(
         r'^profile/(?P<profile>.+)$',
+        # r'^profile/(?P<profile>[\w.@+-]+)/$',
         # r'^Nikouz/$',
         login_required(WallProfileView.as_view()),
         name='wall-profile-view',
