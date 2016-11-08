@@ -47,18 +47,18 @@ class PostAdmin(admin.ModelAdmin):
         # ),
         (
             _('Content'),
-            {'fields': ('user', 'content', 'comments')}
+            {'fields': ('author', 'content', 'comments')}
         ),
         (
             _('Metadata'),
-            {'fields': ('is_public', 'is_removed')}
+            {'fields': ('wall', 'is_public', 'is_removed')}
         ),
     )
 
     list_display = (
-        'user',
+        'author',
         'submit_date',
-        'wall_profile',
+        'wall',
         'preview',
         'is_public',
         'is_removed',
@@ -67,7 +67,7 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'submit_date'
     ordering = ('-submit_date',)
     # raw_id_fields = ('user',)
-    search_fields = ('content', 'user', 'email')
+    search_fields = ('content', 'author', 'email')
     actions = ["approve_comments", "remove_comments"]
 
     def preview(self, post):
@@ -140,16 +140,16 @@ class CommentAdmin(admin.ModelAdmin):
         (
             _('Content'),
             # {'fields': ('user', 'user_name', 'user_email', 'comment')}
-            {'fields': ('user', 'content')}
+            {'fields': ('author', 'content')}
         ),
         (
             _('Metadata'),
-            {'fields': ('is_public', 'is_removed')}
+            {'fields': ('post', 'is_public', 'is_removed')}
         ),
     )
 
     list_display = (
-        'user',
+        'author',
         'submit_date',
         'preview',
         'is_public',

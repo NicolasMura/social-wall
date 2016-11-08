@@ -70,8 +70,6 @@ class PostCommentAbstract(models.Model):
     class Meta:
         abstract = True
         ordering = ('submit_date', )
-        verbose_name = 'comment'
-        verbose_name_plural = 'comments',
 
     # profile = models.ForeignKey(
     #     # settings.AUTH_USER_MODEL,
@@ -82,13 +80,13 @@ class PostCommentAbstract(models.Model):
     #     related_name="%(class)s_comments",
     #     on_delete=models.SET_NULL,
     # )
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Auteur',
         blank=False,
         null=False,
         # related_name="%(class)s_comments",
-        related_name="%(class)s_comments",
+        related_name="%(class)s_author",
         # on_delete=models.SET_NULL,
     )
     content = models.CharField(
@@ -100,18 +98,18 @@ class PostCommentAbstract(models.Model):
 
     # Metadata about the comment
     submit_date = models.DateTimeField(
-        verbose_name='date/time submitted',
+        verbose_name='Date de publication',
         auto_now_add=True,
         auto_now=False,
     )
     is_public = models.BooleanField(
-        verbose_name='is public',
+        verbose_name='public ?',
         default=True,
         help_text='Uncheck this box to make the comment effectively '
         'disappear from the site.',
     )
     is_removed = models.BooleanField(
-        verbose_name='is removed',
+        verbose_name='Désactivé ?',
         default=False,
         help_text='Check this box if the comment is inappropriate. '
         'A "This comment has been removed" message will '
@@ -119,7 +117,7 @@ class PostCommentAbstract(models.Model):
     )
 
     def __str__(self):
-        return "%s: %s..." % (self.user, self.content[:50])
+        return "%s: %s..." % (self.author, self.content[:50])
 
     # def __str__(self):
     #     return "Commentaire {0}".format(self.content)
@@ -137,7 +135,7 @@ class PostCommentAbstract(models.Model):
             'comment': self.comment,
             'domain': self.site.domain,
         }
-        return 'Posted by %(user)s '
+        return 'Posted by %(author)s '
         'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s' % d
 
 
@@ -148,16 +146,18 @@ class Post(PostCommentAbstract):
 
     comments = models.ManyToManyField(
         'social.Comment',
+        blank=True,
+        null=True,
         verbose_name='Commentaires relatifs',
         related_name='comments',
     )
-    wall_profile = models.ForeignKey(
+    wall = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='Mur sur lequel le post a été publié',
+        verbose_name='Publié sur le mur de',
         blank=False,
         null=False,
         # related_name="%(class)s_comments",
-        related_name="wall_profile",
+        related_name="wall",
     )
 
 
@@ -166,11 +166,11 @@ class Comment(PostCommentAbstract):
         verbose_name = 'Commentaire'
         verbose_name_plural = 'Commentaires'
 
-    # post = models.ForeignKey(
-    #     'social.Post',
-    #     verbose_name='Post relatif',
-    #     blank=True,
-    #     null=True,
-    #     related_name="%(class)s_comments",
-    #     on_delete=models.SET_NULL,
-    #     )
+    post = models.ForeignKey(
+        'social.Post',
+        verbose_name='Post relatif',
+        blank=False,
+        null=False,
+        related_name="%(class)s_comments",
+        # on_delete=models.SET_NULL,
+        )

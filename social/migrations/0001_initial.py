@@ -2,11 +2,10 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import django.core.validators
-from django.conf import settings
-import django.db.models.deletion
-import django.utils.timezone
 import django.contrib.auth.models
+from django.conf import settings
+import django.utils.timezone
+import django.core.validators
 
 
 class Migration(migrations.Migration):
@@ -19,20 +18,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
-                ('password', models.CharField(verbose_name='password', max_length=128)),
-                ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
-                ('is_superuser', models.BooleanField(help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status', default=False)),
-                ('username', models.CharField(max_length=30, verbose_name='username', help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', unique=True, validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.', 'invalid')], error_messages={'unique': 'A user with that username already exists.'})),
-                ('first_name', models.CharField(verbose_name='first name', max_length=30, blank=True)),
-                ('last_name', models.CharField(verbose_name='last name', max_length=30, blank=True)),
-                ('email', models.EmailField(verbose_name='email address', max_length=254, blank=True)),
-                ('is_staff', models.BooleanField(help_text='Designates whether the user can log into this admin site.', verbose_name='staff status', default=False)),
-                ('is_active', models.BooleanField(help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active', default=True)),
-                ('date_joined', models.DateTimeField(verbose_name='date joined', default=django.utils.timezone.now)),
-                ('avatar', models.FileField(verbose_name='Votre avatar', upload_to='upload/avatars', default='upload/avatars/default-avatar.png', blank=True)),
-                ('groups', models.ManyToManyField(to='auth.Group', related_name='user_set', related_query_name='user', help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', verbose_name='groups', blank=True)),
-                ('user_permissions', models.ManyToManyField(to='auth.Permission', related_name='user_set', related_query_name='user', help_text='Specific permissions for this user.', verbose_name='user permissions', blank=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(null=True, blank=True, verbose_name='last login')),
+                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
+                ('username', models.CharField(max_length=30, error_messages={'unique': 'A user with that username already exists.'}, unique=True, validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.', 'invalid')], help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', verbose_name='username')),
+                ('first_name', models.CharField(max_length=30, blank=True, verbose_name='first name')),
+                ('last_name', models.CharField(max_length=30, blank=True, verbose_name='last name')),
+                ('email', models.EmailField(max_length=254, blank=True, verbose_name='email address')),
+                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
+                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
+                ('avatar', models.FileField(default='upload/avatars/default-avatar.png', upload_to='upload/avatars', blank=True, verbose_name='Votre avatar')),
+                ('groups', models.ManyToManyField(verbose_name='groups', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', to='auth.Group', related_query_name='user')),
+                ('user_permissions', models.ManyToManyField(verbose_name='user permissions', blank=True, help_text='Specific permissions for this user.', related_name='user_set', to='auth.Permission', related_query_name='user')),
             ],
             options={
                 'verbose_name_plural': 'Profils utilisateurs',
@@ -45,12 +44,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
-                ('content', models.CharField(verbose_name='Commentaire', max_length=3000)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('content', models.CharField(default='', max_length=1000, verbose_name='Commentaire')),
                 ('submit_date', models.DateTimeField(verbose_name='date/time submitted', auto_now_add=True)),
-                ('is_public', models.BooleanField(help_text='Uncheck this box to make the comment effectively disappear from the site.', verbose_name='is public', default=True)),
-                ('is_removed', models.BooleanField(help_text='Check this box if the comment is inappropriate. A "This comment has been removed" message will be displayed instead.', verbose_name='is removed', default=False)),
-                ('user', models.ForeignKey(related_name='comment_comments', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Profil', to=settings.AUTH_USER_MODEL, null=True, blank=True)),
+                ('is_public', models.BooleanField(default=True, help_text='Uncheck this box to make the comment effectively disappear from the site.', verbose_name='is public')),
+                ('is_removed', models.BooleanField(default=False, help_text='Check this box if the comment is inappropriate. A "This comment has been removed" message will be displayed instead.', verbose_name='is removed')),
+                ('author', models.ForeignKey(verbose_name='Auteur', to=settings.AUTH_USER_MODEL, related_name='comment_author')),
             ],
             options={
                 'verbose_name_plural': 'Commentaires',
@@ -60,13 +59,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Post',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
-                ('content', models.CharField(verbose_name='Commentaire', max_length=3000)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('content', models.CharField(default='', max_length=1000, verbose_name='Commentaire')),
                 ('submit_date', models.DateTimeField(verbose_name='date/time submitted', auto_now_add=True)),
-                ('is_public', models.BooleanField(help_text='Uncheck this box to make the comment effectively disappear from the site.', verbose_name='is public', default=True)),
-                ('is_removed', models.BooleanField(help_text='Check this box if the comment is inappropriate. A "This comment has been removed" message will be displayed instead.', verbose_name='is removed', default=False)),
-                ('comments', models.ManyToManyField(verbose_name='Commentaires relatifs', related_name='comments', to='social.Comment')),
-                ('user', models.ForeignKey(related_name='post_comments', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Profil', to=settings.AUTH_USER_MODEL, null=True, blank=True)),
+                ('is_public', models.BooleanField(default=True, help_text='Uncheck this box to make the comment effectively disappear from the site.', verbose_name='is public')),
+                ('is_removed', models.BooleanField(default=False, help_text='Check this box if the comment is inappropriate. A "This comment has been removed" message will be displayed instead.', verbose_name='is removed')),
+                ('author', models.ForeignKey(verbose_name='Auteur', to=settings.AUTH_USER_MODEL, related_name='post_author')),
+                ('comments', models.ManyToManyField(to='social.Comment', related_name='comments', verbose_name='Commentaires relatifs')),
+                ('wall_profile', models.ForeignKey(verbose_name='Mur sur lequel le post a été publié', to=settings.AUTH_USER_MODEL, related_name='wall_profile')),
             ],
             options={
                 'verbose_name_plural': 'Posts',

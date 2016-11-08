@@ -1,0 +1,26 @@
+<div class="col-xs-12 block-infos">
+  <div class="row">
+    <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+      {# Si le profil du mur affiché est l'auteur du post #}
+      {% if post.wall = post.author %}
+      <img class="wall-avatar" src="{{ post.author.avatar.url }}" width="50">
+      {% else %}
+      <a class="username" href="{% url 'social:wall-profile-view' post.author %}">
+        <img class="wall-avatar" src="{{ post.author.avatar.url }}" width="50">
+      </a>
+      {% endif %}
+    </div>
+    <div class="col-xs-10 col-sm-11 col-md-11 infos-user">
+      {# Si le profil du mur affiché est l'auteur du post #}
+      {% if post.wall = post.author %}
+      <b>{{ post.wall }}</b>
+      {% else %}
+      <b><a class="username" href="{% url 'social:wall-profile-view' post.author %}">{{ post.author }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post.wall }}</b>
+      {% endif %}
+      <p><i>{{ post.submit_date }}</i></p>
+    </div>
+  </div>
+</div>
+<div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
+  <p>{{ post.content }}</p>
+</div>

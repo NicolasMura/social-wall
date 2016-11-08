@@ -1,0 +1,33 @@
+<div class="col-xs-12 top-post">
+  <div class="row">
+    <div class="col-xs-2 col-sm-1 text-center">
+      {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
+      {% if wall_profile.profile = user %}
+      <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+      {% else %}
+      <a href="{% url 'social:wall-profile-view' user.username %}">
+        <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+      </a>
+      {% endif %}
+    </div>
+    <div class="col-xs-10 col-sm-11 post">
+      <form action="" method="POST" role="form">
+        {% if wall_profile.user_post_form.errors.content %}
+        <div class="alert alert-danger">
+          <strong>{{ wall_profile.user_post_form.errors.content|escape }}</strong>
+        </div>
+        {% endif %}
+        {% csrf_token %}
+        <div class="input-group">
+          {{ wall_profile.user_post_form.content }}
+          {# {{ user_post_form.content|safe }} #}
+          <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
+          <input type="hidden" class="form-control" id="wall" name="wall" value="{{ wall_profile.profile.id }}">
+          <span class="input-group-btn">
+          <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

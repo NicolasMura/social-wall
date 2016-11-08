@@ -67,7 +67,7 @@ class ProfileForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['content', 'user', 'wall_profile']
+        fields = ['content', 'author', 'wall']
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -94,7 +94,7 @@ class PostForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content', 'user']
+        fields = ['content', 'author']
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',

@@ -1,7 +1,7 @@
 {% extends 'social/base.html' %}
 {% load static %}
 
-{% block title %}Social wall{% endblock %}
+{% block title %}{{ wall_profile.profile }}'s wall{% endblock %}
 
 {% block retour %}{% endblock %}
 {% block content %}
@@ -18,7 +18,7 @@
 
   <!-- Si aucun commentaire sur ce mur -->
   {% if wall_profile.profile_posts.count = 0 %}
-  <!-- Si wall_profile = user -->
+  {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
   {% if wall_profile.profile = user %}
   <div class="col-xs-12">
     <p>Votre mur est vide : postez votre premier commentaire !</p>
@@ -30,74 +30,26 @@
   {% endif %}
   {% endif %}
 
-  <div class="col-xs-12 top-post">
-    <div class="row">
-      <div class="col-xs-2 col-sm-1 text-center">
-        <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
-      </div>
-      <div class="col-xs-10 col-sm-11 post">
-        <form action="" method="POST" role="form">
-          {% if wall_profile.user_post_form.errors.content %}
-          <div class="alert alert-danger">
-            <strong>{{ wall_profile.user_post_form.errors.content|escape }}</strong>
-          </div>
-          {% endif %}
-          {% csrf_token %}
-          <div class="input-group">
-            {{ wall_profile.user_post_form.content }}
-            {# {{ user_post_form.content|safe }} #}
-            <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
-            <input type="hidden" class="form-control" id="wall_profile" name="wall_profile" value="{{ wall_profile.profile.id }}">
-            <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
-            </span>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+  {% include 'social/widgets/top_post_form.html' with wall_profile=wall_profile user=user %}
 
-  <!-- Si aucun post sur ce mur -->
+  {# Si aucun post sur ce mur #}
   {% if wall_profile.profile_posts.count != 0 %}
 
   <div class="col-xs-12">    
-    <!-- Si wall_profile = user -->
+    {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
     {% if wall_profile.profile = user %}
-    <h2>Derniers posts publiés sur votre mur</h2>
+    <h3>Derniers posts publiés sur votre mur</h3>
     {% else %}
-    <h2>Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}</h2>
+    <h3>Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}</h3>
     {% endif %}
   </div>
 
   {% for post in wall_profile.profile_posts %}
 
   <!-- POST BLOCK -->
-  <div class="col-xs-12 block-infos">
-    <div class="row">
-      <div class="col-xs-2 col-sm-1 col-md-1 text-center">
-        {# Si le profil du mur affiché est l'auteur du post #}
-        {% if post.wall_profile = post.user %}
-        <img class="wall-avatar" src="{{ post.user.avatar.url }}" width="50">
-        {% else %}
-        <a class="username" href="{% url 'social:wall-profile-view' post.user %}">
-          <img class="wall-avatar" src="{{ post.user.avatar.url }}" width="50">
-        </a>
-        {% endif %}
-      </div>
-      <div class="col-xs-10 col-sm-11 col-md-11 infos-user">
-        {# Si le profil du mur affiché est l'auteur du post #}
-        {% if post.wall_profile = post.user %}
-        <b>{{ post.wall_profile }}</b>
-        {% else %}
-        <b><a class="username" href="{% url 'social:wall-profile-view' post.user %}">{{ post.user }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post.wall_profile }}</b>
-        {% endif %}
-        <p><i>{{ post.submit_date }}</i></p>
-      </div>
-    </div>
-  </div>
-  <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
-    <p>{{ post.content }}</p>
-  </div>
+  
+  {% include 'social/widgets/post_block.html' with post=post %}
+    
   <!-- END POST BLOCK -->
 
   <div class="col-xs-12 comments-block-container">
@@ -111,59 +63,11 @@
           
           {% for comment in post.comments.all %} 
           <!-- COMMENTS -->
-          <div class="col-xs-12">
-            <div class="row">
-              
-             {# !!! il faut que < comment.user > soit un lien s'il est différent de July (ie différent de < wall_user.profile >) !!! #}
-
-              <div class="col-xs-2 col-sm-1 col-md-1 text-center">
-                {# Si l'utilisateur connecté est l'auteur du commentaire #}
-                {% if comment.user = wall_profile.profile %}
-                <img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35">
-                {% else %}
-                <a href="{% url 'social:wall-profile-view' comment.user.username %}"><img class="wall-avatar" src="{{ comment.user.avatar.url }}" width="35"></a>
-                {% endif %}
-              </div>
-              <div class="col-xs-10 col-sm-11 col-md-11">
-                {# l'utilisateur connecté user est l'auteur du commentaire #}
-                {% if comment.user = wall_profile.profile %}
-                <b>{{ comment.user }}</b>
-                {% else %}
-                <a class="username" href="{% url 'social:wall-profile-view' comment.user.username %}"><b>{{ comment.user }}</b></a>
-                {% endif %}
-                <p><i>{{ comment.submit_date }}</i></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
-                <p>{{ comment.content }}</p>
-              </div>
-            </div>
-          </div>
+          {% include 'social/widgets/comment_block.html' with comment=comment wall_profile=wall_profile %}
           <!-- END COMMENTS -->
           {% endfor %}
 
-          <!-- COMMENT FORM -->
-          <div class="col-xs-12">
-            <form action="" method="POST" role="form">
-              {% if wall_profile.user_comment_form.errors.content %}
-              <div class="alert alert-danger">
-                <strong>{{ wall_profile.user_comment_form.errors.content|escape }}</strong>
-              </div>
-              {% endif %}
-
-              {% csrf_token %}
-              <div class="input-group">
-                {{ wall_profile.user_comment_form.content }}
-                {# {{ user_comment_form.content|safe }} #}
-                <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
-                <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary" name="submit-user-comment">Envoyer</button>
-                </span>
-              </div>
-            </form>
-          </div>
-          <!-- END COMMENT FORM -->
+          {% include 'social/widgets/comment_form.html' with wall_profile=wall_profile user=user %}
         </div>
       </div>
       <!-- END COMMENTS BLOCK -->

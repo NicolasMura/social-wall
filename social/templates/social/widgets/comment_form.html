@@ -1,0 +1,23 @@
+{# TO DO : MAKE IT GENERIC (currently : can't be used on wall.html... #}
+
+<!-- COMMENT FORM -->
+<div class="col-xs-12">
+  <form action="" method="POST" role="form">
+    {% if wall_profile.user_comment_form.errors.content %}
+    <div class="alert alert-danger">
+      <strong>{{ wall_profile.user_comment_form.errors.content|escape }}</strong>
+    </div>
+    {% endif %}
+
+    {% csrf_token %}
+    <div class="input-group">
+      {{ wall_profile.user_comment_form.content }}
+      {# {{ user_comment_form.content|safe }} #}
+      <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
+      <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary" name="submit-user-comment">Envoyer</button>
+      </span>
+    </div>
+  </form>
+</div>
+<!-- END COMMENT FORM -->

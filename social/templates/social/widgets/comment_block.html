@@ -1,0 +1,29 @@
+<div class="col-xs-12">
+  <div class="row">
+    
+   {# !!! il faut que < comment.author > soit un lien s'il est différent de July (ie différent de < wall_user.profile >) !!! #}
+
+    <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+      {# Si l'utilisateur connecté est l'auteur du commentaire #}
+      {% if comment.author = wall_profile.profile %}
+      <img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35">
+      {% else %}
+      <a href="{% url 'social:wall-profile-view' comment.author %}"><img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35"></a>
+      {% endif %}
+    </div>
+    <div class="col-xs-10 col-sm-11 col-md-11">
+      {# l'utilisateur connecté user est l'auteur du commentaire #}
+      {% if comment.author = wall_profile.profile %}
+      <b>{{ comment.author }}</b>
+      {% else %}
+      <a class="username" href="{% url 'social:wall-profile-view' comment.author %}"><b>{{ comment.author }}</b></a>
+      {% endif %}
+      <p><i>{{ comment.submit_date }}</i></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
+      <p>{{ comment.content }}</p>
+    </div>
+  </div>
+</div>

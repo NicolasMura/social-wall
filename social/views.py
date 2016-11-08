@@ -9,7 +9,7 @@ from .models import Profile, Post
 from .forms import ProfileForm
 from django.contrib.auth import authenticate, login
 
-from .wall_profile import get_wall_profile
+from .wall_profile import get_wall_home, get_wall_profile
 
 
 class AppView(View):
@@ -37,7 +37,14 @@ class WallView(AppView):
 
     # Essayer d'utiliser une vue générique !
     def get(self, request):
-        return self.render(request)
+        # TEMP
+        user = request.user
+        wall_home = get_wall_home(
+                user=user)
+        self.context.update({
+            'wall_home': wall_home
+        })
+        return render(request, self.template_name, self.context)
 
     def render(self, request):
         # self.context.update(self.build_context(request))
@@ -100,7 +107,6 @@ class WallProfileView(AppView):
 
     def get(self, request, profile):
         profile = Profile.objects.get(username=profile)
-
         wall_profile = get_wall_profile(
                 profile=profile)
         self.context.update({
