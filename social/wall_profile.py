@@ -4,8 +4,8 @@ from .forms import PostForm, CommentForm
 from django.contrib import messages
 
 
-def get_wall_home(user):
-    return WallHome(user)
+def get_wall_home():
+    return WallHome()
 
 
 def get_wall_profile(profile):
@@ -58,14 +58,14 @@ class Wall(object):
 
 class WallHome(Wall):
 
-    def __init__(self, user):
-        self.user = user
+    def __init__(self):
+        self.profile = None
         # Get post form
         self.user_post_form = PostForm()
         # Get comment forms
         self.user_comment_form = CommentForm()
         # Get all posts from all users associated comments
-        self.all_posts = Post.objects.order_by('-submit_date')
+        self.posts = Post.objects.order_by('-submit_date')
 
 
 class WallProfile(Wall):
@@ -77,5 +77,5 @@ class WallProfile(Wall):
         # Get comment forms
         self.user_comment_form = CommentForm()
         # Get all user's posts & associated comments
-        self.profile_posts = Post.objects.filter(
+        self.posts = Post.objects.filter(
             wall=self.profile).order_by('-submit_date')

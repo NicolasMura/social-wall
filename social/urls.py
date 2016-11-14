@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.conf.urls import patterns, url
 from django.contrib.auth import views as auth_views
 
@@ -20,11 +20,6 @@ urlpatterns = patterns(
     #     'login_view',
     #     name='login_view',
     # ),
-    url(
-        r'^post-create/$',
-        PostCreate.as_view(),
-        name='generic-post-create',
-    ),
     url(
         # TO DO sur cette vue :
         # - rediriger vers le wall-user-view
@@ -61,7 +56,8 @@ urlpatterns = patterns(
         r'^profile/(?P<profile>.+)$',
         # r'^profile/(?P<profile>[\w.@+-]+)/$',
         # r'^Nikouz/$',
-        login_required(WallProfileView.as_view()),
+        WallProfileView.as_view(),
+        # login_required(WallProfileView.as_view()),
         name='wall-profile-view',
     ),
 )

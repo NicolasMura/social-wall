@@ -1,86 +1,55 @@
-{% extends 'social/base.html' %}
+{% extends 'social/wall_base.html' %}
 {% load static %}
 
 {% block title %}{{ wall_profile.profile }}'s wall{% endblock %}
 
-{% block retour %}{% endblock %}
-{% block content %}
-<h1>
-  <!-- Si wall_profile = user -->
-  {% if wall_profile.profile = user %}
-  Bienvenue sur votre mur, {{ user.username }}
-  {% else %}
-  Vous êtes sur le mur de {{ wall_profile.profile.username }}
-  {% endif %}
-</h1>
 
-<div class="row">
+{% block wall_top_form %}
+  {% include 'social/widgets/top_post_form.html' with wall=wall_profile user=user %}
+{% endblock wall_top_form %}
 
-  <!-- Si aucun commentaire sur ce mur -->
-  {% if wall_profile.profile_posts.count = 0 %}
-  {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-  {% if wall_profile.profile = user %}
-  <div class="col-xs-12">
-    <p>Votre mur est vide : postez votre premier commentaire !</p>
-  </div>
-  {% else %}
-  <div class="col-xs-12">
-    <p>Le mur de {{ wall_profile.profile.username }} est vide : écrivez-lui !</p>
-  </div>
-  {% endif %}
-  {% endif %}
 
-  {% include 'social/widgets/top_post_form.html' with wall_profile=wall_profile user=user %}
+{% block wall_posts %}
+  {# Si au moins 1 post sur ce mur #}
+  {% if wall_profile.posts.count > 0 %}
+    <div class="col-xs-12">    
+      <h3>
+        {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
+        {% if wall_profile.profile = user %}
+        Derniers posts publiés sur votre mur
+        {% else %}
+        Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}
+        {% endif %}
+      </h3>
+    </div>
+
+    {% for post in wall_profile.posts %}
+      
+      <!-- POST BLOCK -->
+      {% include 'social/widgets/post_block.html' with wall=wall_profile post=post %}
+      <!-- END POST BLOCK -->
+      
+      <!-- POST COMMENTS BLOCK -->
+      {% include 'social/widgets/post_comments_block.html' with wall=wall_profile post=post %}
+      <!-- END POST COMMENTS BLOCK -->
+
+    {% endfor %}
 
   {# Si aucun post sur ce mur #}
-  {% if wall_profile.profile_posts.count != 0 %}
-
-  <div class="col-xs-12">    
-    {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-    {% if wall_profile.profile = user %}
-    <h3>Derniers posts publiés sur votre mur</h3>
-    {% else %}
-    <h3>Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}</h3>
-    {% endif %}
+  {% else %}
+  <div class="col-xs-12">
+    <h3>
+      {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
+      {% if wall_profile.profile = user %}
+      Aucun post publié sur votre mur
+      {% else %}
+      Aucun post publié sur le mur de {{ wall_profile.profile.username }}
+      {% endif %}
+    </h3>
   </div>
-
-  {% for post in wall_profile.profile_posts %}
-
-  <!-- POST BLOCK -->
-  
-  {% include 'social/widgets/post_block.html' with post=post %}
-    
-  <!-- END POST BLOCK -->
-
-  <div class="col-xs-12 comments-block-container">
-    <div class="row">
-      
-      <!-- COMMENTS BLOCK -->
-      <div class="col-xs-12 comments-block">
-        <div class="row">
-    
-          <p><i class="fa fa-comment" aria-hidden="true"></i> {{ post.comments.count }} commentaire{% if post.comments.count > 1 %}s{% endif %}</p>
-          
-          {% for comment in post.comments.all %} 
-          <!-- COMMENTS -->
-          {% include 'social/widgets/comment_block.html' with comment=comment wall_profile=wall_profile %}
-          <!-- END COMMENTS -->
-          {% endfor %}
-
-          {% include 'social/widgets/comment_form.html' with wall_profile=wall_profile user=user %}
-        </div>
-      </div>
-      <!-- END COMMENTS BLOCK -->
-
-    </div>
-  </div>
-
-  {% endfor %}
-
   {% endif %}
+{% endblock wall_posts %}
 
-</div>
-{% endblock %}
 
 {% block page_javascript %}
   <script type="text/javascript">

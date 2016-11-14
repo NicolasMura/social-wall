@@ -1,0 +1,22 @@
+<div class="col-xs-10 col-sm-11 col-xs-offset-2 col-sm-offset-1 comments-block-container">
+  <div class="row">
+    <div class="col-xs-12 comments-block">
+      <div class="row">
+        <p>
+          <i class="fa fa-comment" aria-hidden="true"></i> {{ post.comments.count }} commentaire{% if post.comments.count > 1 %}s{% endif %}
+        </p>
+
+        <!-- COMMENTS -->
+        {% for comment in post.comments.all %}
+          {% include 'social/widgets/comment.html' with comment=comment wall=wall_profile %}
+        {% endfor %}
+        <!-- END COMMENTS -->
+        
+        <!-- COMMENT FORM -->
+        {% include 'social/widgets/comment_form.html' with wall=wall user=user %}
+        <!-- END COMMENT FORM -->
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,32 +1,45 @@
+{% load static %}
+
 <div class="col-xs-12 top-post">
   <div class="row">
     <div class="col-xs-2 col-sm-1 text-center">
-      {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-      {% if wall_profile.profile = user %}
-      <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
-      {% else %}
-      <a href="{% url 'social:wall-profile-view' user.username %}">
+      {% if user.is_authenticated %}
+        {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
+        {% if wall.profile = user %}
         <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
-      </a>
+        {% else %}
+        <a href="{% url 'social:wall-profile-view' user.username %}">
+          <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+        </a>
+        {% endif %}
+      {% else %}
+        <img class="wall-avatar" src="{% static 'avatars/default-avatar.png' %}" width="50">
       {% endif %}
     </div>
     <div class="col-xs-10 col-sm-11 post">
       <form action="" method="POST" role="form">
-        {% if wall_profile.user_post_form.errors.content %}
+        {% if wall.user_post_form.errors.content %}
         <div class="alert alert-danger">
-          <strong>{{ wall_profile.user_post_form.errors.content|escape }}</strong>
+          <strong>{{ wall.user_post_form.errors.content|escape }}</strong>
         </div>
         {% endif %}
+
         {% csrf_token %}
-        <div class="input-group">
-          {{ wall_profile.user_post_form.content }}
-          {# {{ user_post_form.content|safe }} #}
-          <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
-          <input type="hidden" class="form-control" id="wall" name="wall" value="{{ wall_profile.profile.id }}">
-          <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
-          </span>
-        </div>
+        <fieldset {% if not user.is_authenticated %}disabled{% endif %}>
+          <div class="input-group">
+            {% if user.is_authenticated %}
+              {{ wall.user_post_form.content }}
+              <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
+              <input type="hidden" class="form-control" id="wall" name="wall" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
+            {% else %}
+              <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir publier un post">
+              {# {{ user_post_form.content|safe }} #}
+            {% endif %}
+            <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
+            </span>
+          </div>
+        </fieldset>
       </form>
     </div>
   </div>

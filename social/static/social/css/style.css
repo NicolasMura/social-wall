@@ -1,16 +1,16 @@
 /*Custom styles*/
 
+body{
+    background-color: #E9EBEE;
+}
+
 .navbar{
     border-radius: 0px;
 }
 .navbar-inverse{
-    background-color: #3B5998;
-    border-color: #3B5998;
+    background-color: #3B5999;
+    border: none;
     padding: 0px 20px;
-}
-
-.navbar-inverse a{
-    /*color: black!important;*/
 }
 
 .nav-avatar{
@@ -26,8 +26,12 @@ h1{
     margin-bottom: 0px;
 }
 
-.username b{
+.container a{
     border-bottom: 1px dotted black;
+}
+
+.container a:hover{
+    text-decoration: none;
 }
 
 .block-infos{
@@ -44,7 +48,7 @@ h1{
 }
 
 .infos-user{
-    padding-left: 20px;
+    
 }
 
 .wall-avatar{
@@ -61,6 +65,7 @@ h1{
 
 .comments-block{
     border: 1px solid #ccc;
+    background-color: #F6F7F9;
     padding: 10px 15px 15px 15px;
 }
 
@@ -74,6 +79,8 @@ h1{
 
 .jumbotron{
     margin-top: 20px;
+    background-color: #3B5999;
+    color: white;
 }
 
 ul.messages{
@@ -90,6 +97,8 @@ ul.messages li.success{
 }
 
 ul.errorlist{
+    /*background-color: #f2dede;*/
+    /*color: #a94442;*/
     list-style-type: none;
     padding: 0px;
     margin:0px;

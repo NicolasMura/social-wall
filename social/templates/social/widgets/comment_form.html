@@ -1,23 +1,26 @@
-{# TO DO : MAKE IT GENERIC (currently : can't be used on wall.html... #}
-
-<!-- COMMENT FORM -->
 <div class="col-xs-12">
   <form action="" method="POST" role="form">
-    {% if wall_profile.user_comment_form.errors.content %}
+    {% if wall.user_comment_form.errors.content %}
     <div class="alert alert-danger">
-      <strong>{{ wall_profile.user_comment_form.errors.content|escape }}</strong>
+      <strong>{{ wall.user_comment_form.errors.content|escape }}</strong>
     </div>
     {% endif %}
 
     {% csrf_token %}
-    <div class="input-group">
-      {{ wall_profile.user_comment_form.content }}
-      {# {{ user_comment_form.content|safe }} #}
-      <input type="hidden" class="form-control" id="user" name="user" value="{{ user.id }}">
-      <span class="input-group-btn">
-      <button type="submit" class="btn btn-primary" name="submit-user-comment">Envoyer</button>
-      </span>
-    </div>
+    <fieldset {% if not user.is_authenticated %}disabled{% endif %}>
+      <div class="input-group">
+        {% if user.is_authenticated %}
+          {{ wall.user_comment_form.content }}
+          {# {{ user_comment_form.content|safe }} #}
+          <input type="hidden" class="form-control" id="user" name="user" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
+        {% else %}
+          <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire">
+          {# {{ user_post_form.content|safe }} #}
+        {% endif %}
+        <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary" name="submit-user-comment">Envoyer</button>
+        </span>
+      </div>
+    </fieldset>
   </form>
 </div>
-<!-- END COMMENT FORM -->
