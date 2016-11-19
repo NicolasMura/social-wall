@@ -3,14 +3,18 @@
     <div class="col-xs-2 col-sm-1 col-md-1 text-center">
       {# Si on est sur le wall_home) #}
       {% if wall = wall_home %}
-        <a href="{% url 'social:wall-profile-view' comment.author %}"><img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35"></a>
+        <a href="{% url 'social:wall-profile-view' comment.author %}">
+          <img class="wall-avatar not_dotted" src="{{ comment.author.avatar.url }}" width="35">
+        </a>
       {# Sinon #}
       {% else %}
         {# Si l'utilisateur connecté est l'auteur du commentaire #}
         {% if comment.author = wall.profile %}
           <img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35">
         {% else %}
-          <a href="{% url 'social:wall-profile-view' comment.author %}"><img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35"></a>
+          <a class="not_dotted" href="{% url 'social:wall-profile-view' comment.author %}">
+            <img class="wall-avatar" src="{{ comment.author.avatar.url }}" width="35">
+          </a>
         {% endif %}
       {% endif %}
     </div>
@@ -21,7 +25,7 @@
       {% else %}
         <b>{{ comment.author }}</b>
       {% endif %}
-      <p><i>{{ comment.submit_date }}</i></p>
+      <p><i class="date">{{ comment.submit_date }}</i></p>
     </div>
   </div>
   <div class="row">

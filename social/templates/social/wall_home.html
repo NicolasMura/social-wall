@@ -11,21 +11,23 @@
 
 {% block wall_posts %}
   {# Si au moins 1 post sur OpenFaceRoom #}
-  {% if wall_home.posts.count > 0 %}
+  {# A essayer : for - empty - endfor #}
+  {% if wall_home.post_objects_list|length > 0 %}
     <div class="col-xs-12">
       <h3>
         Derniers posts publiés sur OpenFaceRoom
+
       </h3>
     </div>
 
-    {% for post in wall_home.posts %}
+    {% for post_object_dict in wall_home.post_objects_list %}
           
       <!-- POST BLOCK -->
-      {% include 'social/widgets/post_block.html' with wall=wall_home post=post %}
+      {% include 'social/widgets/post_block.html' with wall=wall_home post_object=post_object_dict.post_object %}
       <!-- END POST BLOCK -->
       
       <!-- POST COMMENTS BLOCK -->
-      {% include 'social/widgets/post_comments_block.html' with wall=wall_home post=post %}
+      {% include 'social/widgets/post_comments_block.html' with wall=wall_home post_object=post_object_dict.post_object %}
       <!-- END POST COMMENTS BLOCK -->
 
     {% endfor %}
@@ -35,6 +37,7 @@
   <div class="col-xs-12">
     <h3>
       Aucun post publié sur OpenFaceRoom
+
     </h3>
   </div>
   {% endif %}
@@ -45,6 +48,7 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('#post-form-content-input').attr("placeholder", "Exprimez-vous, {{ user.username }}");
+
     })
   </script>
 {% endblock page_javascript %}

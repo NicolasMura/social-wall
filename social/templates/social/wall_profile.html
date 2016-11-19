@@ -11,26 +11,22 @@
 
 {% block wall_posts %}
   {# Si au moins 1 post sur ce mur #}
-  {% if wall_profile.posts.count > 0 %}
+  {# A essayer : for - empty - endfor #}
+  {% if wall_profile.post_objects_list|length > 0 %}
     <div class="col-xs-12">    
       <h3>
-        {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-        {% if wall_profile.profile = user %}
-        Derniers posts publiés sur votre mur
-        {% else %}
-        Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}
-        {% endif %}
+        {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}Derniers posts publiés sur votre mur{% else %}Derniers posts publiés sur le mur de {{ wall_profile.profile.username }}{% endif %}
       </h3>
     </div>
 
-    {% for post in wall_profile.posts %}
+    {% for post_object_dict in wall_profile.post_objects_list %}
       
       <!-- POST BLOCK -->
-      {% include 'social/widgets/post_block.html' with wall=wall_profile post=post %}
+      {% include 'social/widgets/post_block.html' with wall=wall_profile post_object=post_object_dict.post_object %}
       <!-- END POST BLOCK -->
       
       <!-- POST COMMENTS BLOCK -->
-      {% include 'social/widgets/post_comments_block.html' with wall=wall_profile post=post %}
+      {% include 'social/widgets/post_comments_block.html' with wall=wall_profile post_object=post_object_dict.post_object %}
       <!-- END POST COMMENTS BLOCK -->
 
     {% endfor %}
@@ -39,12 +35,7 @@
   {% else %}
   <div class="col-xs-12">
     <h3>
-      {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-      {% if wall_profile.profile = user %}
-      Aucun post publié sur votre mur
-      {% else %}
-      Aucun post publié sur le mur de {{ wall_profile.profile.username }}
-      {% endif %}
+      {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}Aucun post publié sur votre mur{% else %}Aucun post publié sur le mur de {{ wall_profile.profile.username }}{% endif %}
     </h3>
   </div>
   {% endif %}

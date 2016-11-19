@@ -144,13 +144,13 @@ class Post(PostCommentAbstract):
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
 
-    comments = models.ManyToManyField(
-        'social.Comment',
-        blank=True,
-        null=True,
-        verbose_name='Commentaires relatifs',
-        related_name='comments',
-    )
+    # comments = models.ManyToManyField(
+    #     'social.Comment',
+    #     blank=True,
+    #     null=True,
+    #     verbose_name='Commentaires relatifs',
+    #     related_name='comments',
+    # )
     wall = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Publié sur le mur de',
@@ -166,11 +166,11 @@ class Comment(PostCommentAbstract):
         verbose_name = 'Commentaire'
         verbose_name_plural = 'Commentaires'
 
-    post = models.ForeignKey(
+    related_post = models.ForeignKey(
         'social.Post',
         verbose_name='Post relatif',
         blank=False,
         null=False,
-        related_name="%(class)s_comments",
+        # related_name="%(class)s_comments",
         # on_delete=models.SET_NULL,
         )

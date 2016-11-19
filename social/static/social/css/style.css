@@ -13,6 +13,14 @@ body{
     padding: 0px 20px;
 }
 
+/*a.navbar-brand, .navbar-collapse a, .jumbotron{
+    color: #E9EBEE!important;
+}
+
+a.navbar-brand:hover, .navbar-collapse a:hover{
+    color: white!important;
+}*/
+
 .nav-avatar{
     float:left;
     margin-right: 10px;
@@ -26,8 +34,17 @@ h1{
     margin-bottom: 0px;
 }
 
-.container a{
-    border-bottom: 1px dotted black;
+.date{
+    color: #90949c;
+}
+
+.container a:hover{
+    color: #337ab7;
+    border-bottom: 1px dotted;
+}
+
+.container a.not_dotted{
+    border-bottom: none;
 }
 
 .container a:hover{
@@ -78,9 +95,9 @@ h1{
 }
 
 .jumbotron{
+    color: #E9EBEE;
+    background-color: #3B5999!important;
     margin-top: 20px;
-    background-color: #3B5999;
-    color: white;
 }
 
 ul.messages{
@@ -94,6 +111,7 @@ ul.messages li.success{
     border-color: #0fac8e;
     color: #fff;
     padding: 15px;
+    list-style-type: none;
 }
 
 ul.errorlist{

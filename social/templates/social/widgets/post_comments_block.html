@@ -3,17 +3,17 @@
     <div class="col-xs-12 comments-block">
       <div class="row">
         <p>
-          <i class="fa fa-comment" aria-hidden="true"></i> {{ post.comments.count }} commentaire{% if post.comments.count > 1 %}s{% endif %}
+          <i class="fa fa-comment" aria-hidden="true"></i> {{ post_object.post.comment_set.count }} commentaire{% if post_object.post.comment_set.count > 1 %}s{% endif %}
         </p>
 
-        <!-- COMMENTS -->
-        {% for comment in post.comments.all %}
-          {% include 'social/widgets/comment.html' with comment=comment wall=wall_profile %}
+        {% for comment in post_object.post.comment_set.all %}
+          <!-- COMMENT BLOCK -->
+          {% include 'social/widgets/comment_block.html' with comment=comment wall=wall_profile %}
+          <!-- END COMMENT BLOCK -->
         {% endfor %}
-        <!-- END COMMENTS -->
         
         <!-- COMMENT FORM -->
-        {% include 'social/widgets/comment_form.html' with wall=wall user=user %}
+        {% include 'social/widgets/comment_form.html' with wall=wall user=user post_object=post_object %}
         <!-- END COMMENT FORM -->
 
       </div>

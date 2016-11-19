@@ -47,7 +47,7 @@ class PostAdmin(admin.ModelAdmin):
         # ),
         (
             _('Content'),
-            {'fields': ('author', 'content', 'comments')}
+            {'fields': ('author', 'content')}
         ),
         (
             _('Metadata'),
@@ -144,7 +144,7 @@ class CommentAdmin(admin.ModelAdmin):
         ),
         (
             _('Metadata'),
-            {'fields': ('post', 'is_public', 'is_removed')}
+            {'fields': ('related_post', 'is_public', 'is_removed')}
         ),
     )
 

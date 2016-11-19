@@ -24,7 +24,6 @@ class ProfileForm(UserCreationForm):
             self.cleaned_data['password1'],
         )
         user.avatar = self.cleaned_data['avatar']
-
         user.save()
 
         return user
@@ -41,30 +40,15 @@ class PostForm(forms.ModelForm):
             }),
         }
 
-    # Overwrite clean method to strip HTML tags
-    # def clean(self):
-
-    #     cleaned_data = super(PostForm, self).clean()
-    #     cleaned_data['content'] = strip_tags(cleaned_data.get('content'))
-    #     return cleaned_data
-
-    # def save(self):
-    #     post = super(PostForm, self).save(commit=False)
-    #     post.user = self.cleaned_data['user']
-
-    #     post.save()
-
-    #     return post
-
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content', 'author']
+        fields = ['content', 'author', 'related_post']
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',
-                'id': 'post-comment-content-input',
+                # 'id': 'post-comment-content-input',
                 'placeholder': 'Ajoutez un commentaire',
             }),
         }

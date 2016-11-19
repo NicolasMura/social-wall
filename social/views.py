@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render
-# from django.shortcuts import redirect
 from django.views.generic import View, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
-from .models import Profile, Post
+from .models import Profile
 from .forms import ProfileForm
 from django.contrib.auth import authenticate, login
+import re
 
 from .wall_profile import get_wall_home, get_wall_profile
 
@@ -34,31 +34,37 @@ class WallView(AppView):
     template_name = "social/wall_home.html"
 
     def get(self, request):
-        # TEMP
+        # TEMP ?
         wall_home = get_wall_home()
+
         self.context.update({
-            'wall_home': wall_home
+            'wall_home': wall_home,
         })
         return render(request, self.template_name, self.context)
 
     def post(self, request):
         wall_home = get_wall_home()
+        post_dict = self.request.POST
+        # print(post_dict)
 
-        if 'submit-user-post' in self.request.POST:
+        # If a post has been posted
+        if 'submit-user-post' in post_dict:
             print("POST submit-user-post")
             wall_home.process_user_post(request=request)
-        if 'submit-user-comment' in self.request.POST:
-            print("POST submit-user-comment")
-            wall_home.process_user_comment(request=request)
+
+        # If a comment has been posted
+        reg_exp = r'^(submit-user-comment-\d+)'
+        for key, value in post_dict.items():
+            if re.search(reg_exp, key):
+                post_pk = re.sub('submit-user-comment-', '', key)
+                print("POST submit-user-comment-"+post_pk)
+                wall_home.process_user_comment(request=request)
         self.context.update({
             'wall_home': wall_home,
         })
-        print("Erreurs : ", wall_home.user_comment_form.errors)
-
         return render(request, self.template_name, self.context)
 
     def render(self, request):
-        # self.context.update(self.build_context(request))
         return render(request, self.template_name, self.context)
 
 
@@ -79,7 +85,6 @@ class WallProfileView(AppView):
 
     def post(self, request, profile):
         profile = Profile.objects.get(username=profile)
-
         wall_profile = get_wall_profile(
                 profile=profile)
 
@@ -92,8 +97,6 @@ class WallProfileView(AppView):
         self.context.update({
             'wall_profile': wall_profile,
         })
-        print("Erreurs : ", wall_profile.user_comment_form.errors)
-
         return render(request, self.template_name, self.context)
 
     def render(self, request):

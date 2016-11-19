@@ -2,32 +2,32 @@
   <div class="row">
     <div class="col-xs-2 col-sm-1 col-md-1 text-center">
       {# Si le profil du mur affiché n'est pas l'auteur du post ou si on est sur le wall_home) #}
-      {% if post.wall != post.author or wall = wall_home %}
-        <a class="username" href="{% url 'social:wall-profile-view' post.author %}">
-          <img class="wall-avatar" src="{{ post.author.avatar.url }}" width="50">
+      {% if post_object.post.wall != post_object.post.author or wall = wall_home %}
+        <a class="username not_dotted" href="{% url 'social:wall-profile-view' post_object.post.author %}">
+          <img class="wall-avatar" src="{{ post_object.post.author.avatar.url }}" width="50">
         </a>
       {# Sinon #}
       {% else %}
-        <img class="wall-avatar" src="{{ post.author.avatar.url }}" width="50">
+        <img class="wall-avatar" src="{{ post_object.post.author.avatar.url }}" width="50">
       {% endif %}
     </div>
     <div class="col-xs-10 col-sm-11 col-md-11 infos-user">
       {# Si on est sur le wall_home) #}
       {% if not wall.profile %}
-        <b><a class="username" href="{% url 'social:wall-profile-view' post.author %}">{{ post.author }}</a></b> {% if post.author != post.wall %}<i class="fa fa-arrow-right" aria-hidden="true"></i> <b><a class="username" href="{% url 'social:wall-profile-view' post.wall %}">{{ post.wall }}</a></b>{% endif %}
+        <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.author %}">{{ post_object.post.author }}</a></b> {% if post_object.post.author != post_object.post.wall %}<i class="fa fa-arrow-right" aria-hidden="true"></i> <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.wall %}">{{ post_object.post.wall }}</a></b>{% endif %}
       {# Sinon #}
       {% else %}
         {# Si le profil du mur affiché est l'auteur du post #}
-        {% if post.wall = post.author %}
-          <b>{{ post.wall }}</b>
+        {% if post_object.post.wall = post_object.post.author %}
+          <b>{{ post_object.post.wall }}</b>
         {% else %}
-          <b><a class="username" href="{% url 'social:wall-profile-view' post.author %}">{{ post.author }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post.wall }}</b>
+          <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.author %}">{{ post_object.post.author }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post_object.post.wall }}</b>
         {% endif %}
       {% endif %}
-      <p><i>{{ post.submit_date }}</i></p>
+      <p><i class="date">{{ post_object.post.submit_date }}</i></p>
     </div>
   </div>
 </div>
 <div class="col-xs-10 col-sm-11 col-md-11 col-xs-offset-2 col-sm-offset-1">
-  <p>{{ post.content }}</p>
+  <p>{{ post_object.post.content }}</p>
 </div>

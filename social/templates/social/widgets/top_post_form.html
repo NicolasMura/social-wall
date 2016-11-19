@@ -8,7 +8,7 @@
         {% if wall.profile = user %}
         <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
         {% else %}
-        <a href="{% url 'social:wall-profile-view' user.username %}">
+        <a class="not_dotted" href="{% url 'social:wall-profile-view' user.username %}">
           <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
         </a>
         {% endif %}
@@ -18,25 +18,24 @@
     </div>
     <div class="col-xs-10 col-sm-11 post">
       <form action="" method="POST" role="form">
-        {% if wall.user_post_form.errors.content %}
+        {% if wall.author_post_form.errors.content %}
         <div class="alert alert-danger">
-          <strong>{{ wall.user_post_form.errors.content|escape }}</strong>
+          <strong>{{ wall.author_post_form.errors.content|escape }}</strong>
         </div>
         {% endif %}
-
         {% csrf_token %}
         <fieldset {% if not user.is_authenticated %}disabled{% endif %}>
           <div class="input-group">
             {% if user.is_authenticated %}
-              {{ wall.user_post_form.content }}
+              {{ wall.author_post_form.content }}
+              {# {{ wall.author_post_form.content|safe }} #}
               <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
               <input type="hidden" class="form-control" id="wall" name="wall" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
             {% else %}
-              <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir publier un post">
-              {# {{ user_post_form.content|safe }} #}
+              <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer">
             {% endif %}
             <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" name="submit-user-post">Envoyer</button>
+            <button type="submit" class="btn btn-primary" id="submit-user-post" name="submit-user-post">Envoyer</button>
             </span>
           </div>
         </fieldset>
