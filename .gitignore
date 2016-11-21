@@ -94,3 +94,4 @@ ENV/
 *.DS_Store
 db.sqlite3
 upload/
+__pycache__
