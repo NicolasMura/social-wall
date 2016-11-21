@@ -15,46 +15,31 @@ urlpatterns = patterns(
         WallView.as_view(),
         name='wall-view',
     ),
-    # url(
-    #     r'^/login$',
-    #     'login_view',
-    #     name='login_view',
-    # ),
     url(
         # TO DO sur cette vue :
         # - rediriger vers le wall-user-view
-        # - ajouter un message "Bonjour <user> !"
         r'^login/$',
-        auth_views.login,
-        {'template_name': 'social/login.html'},
+        LoginView.as_view(),
         name='generic-login-view',
         # To try in Django 1.10 :
         # redirect_authenticated_user=...
     ),
-    # url(
-    #     r'^/logout/$',
-    #     auth_views.logout_then_login,
-    #     name='generic_logout_then_login_view',
-    # ),
     url(
         r'^logout/$',
         auth_views.logout,
+        # auth_views.logout_then_login,
         {'next_page': '/'},
         name='generic-logout',
+        # name='generic_logout_then_login_view',
     ),
-    # url(
-    #     r'^/signup/$',
-    #     views.ProfileCreateView.as_view(),
-    #     name='signup_view',
-    # ),
     url(
         r'^signup/$',
         UserProfileCreateView.as_view(),
-        name='generic-signup-view',
+        name='user-profile-signup-view',
     ),
     url(
-        r'^profile/(?P<profile>.+)$',
-        # r'^profile/(?P<profile>[\w.@+-]+)/$',
+        r'^wall/(?P<username>.+)$',
+        # r'^profile/(?P<username>[\w.@+-]+)/$',
         # r'^Nikouz/$',
         WallProfileView.as_view(),
         # login_required(WallProfileView.as_view()),

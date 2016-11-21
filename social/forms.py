@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals  # utile ?
+from __future__ import unicode_literals
 
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Post, Comment
 from django import forms
-# from django.utils.html import strip_tags
+# from django.utils.html import strip_tags (TO DO)
 
 
-class ProfileForm(UserCreationForm):
+class ProfileCreationForm(UserCreationForm):
     class Meta:
         model = Profile
         fields = ['email', 'username', 'avatar']
 
+    # Needs to overwrite save method to save avatar.
     def save(self):
-        user = super(ProfileForm, self).save(commit=False)
+        user = super(ProfileCreationForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
         user.set_password(self.cleaned_data["password1"])
         user.avatar = self.cleaned_data['avatar']
@@ -48,7 +49,6 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',
-                # 'id': 'post-comment-content-input',
                 'placeholder': 'Ajoutez un commentaire',
             }),
         }

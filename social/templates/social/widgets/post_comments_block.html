@@ -8,7 +8,9 @@
 
         {% for comment in post_object.post.comment_set.all %}
           <!-- COMMENT BLOCK -->
-          {% include 'social/widgets/comment_block.html' with comment=comment wall=wall_profile %}
+          {% if comment.is_public and not comment.is_removed %}
+            {% include 'social/widgets/comment_block.html' with comment=comment wall=wall_profile %}
+          {% endif %}
           <!-- END COMMENT BLOCK -->
         {% endfor %}
         

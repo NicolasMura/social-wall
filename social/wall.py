@@ -24,13 +24,8 @@ class Wall(object):
             self.author_post_form.save()
             # Clean form
             self.author_post_form = PostForm()
-            # Update post_objects_list
-            last_inserted_post = Post.objects.latest('submit_date')
-            self.post_objects_list.append({'post_object': {
-                'post': last_inserted_post,
-                'author_comment_form': CommentForm(),
-                }
-            })
+            # Update posts & post_objects_list's wall
+            self.update_wall()
             # Add success message
             messages.add_message(
                 request,
@@ -47,6 +42,7 @@ class Wall(object):
         related_post_pk = request.POST['related_post']
         related_post = Post.objects.get(pk=related_post_pk)
 
+        # TO BE SIMPLIFIED
         for post_object in self.post_objects_list:
             if post_object['post_object']['post'] == related_post:
                 index_post_object_in_list = self.post_objects_list.index(post_object)
@@ -65,6 +61,32 @@ class Wall(object):
         else:
             print("author_comment_form POST NOK !")
 
+    def update_wall(self):
+        """
+        Update posts & post_objects_list's wall after processing user's
+        post or comment
+        """
+
+        # Get all posts from all users associated comments
+        if self.profile:
+            self.posts = Post.objects.filter(
+                wall=self.profile,
+                is_public=True,
+                is_removed=False).order_by('-submit_date')
+        else:
+            self.posts = Post.objects.filter(
+                is_public=True,
+                is_removed=False).order_by('-submit_date')
+        self.post_objects_list = []
+
+        # Get all post objects
+        for post in self.posts:
+            self.post_objects_list.append({'post_object': {
+                'post': post,
+                'author_comment_form': CommentForm(),
+                }
+            })
+
 
 class WallHome(Wall):
 
@@ -73,16 +95,8 @@ class WallHome(Wall):
         self.profile = None
         # Get post form
         self.author_post_form = PostForm()
-        # Get all posts from all users associated comments
-        self.posts = Post.objects.order_by('-submit_date')
-        # Get post objects
-        self.post_objects_list = []
-        for post in self.posts:
-            self.post_objects_list.append({'post_object': {
-                'post': post,
-                'author_comment_form': CommentForm(),
-                }
-            })
+        # Update wall with all posts and post objects
+        self.update_wall()
 
 
 class WallProfile(Wall):
@@ -92,14 +106,5 @@ class WallProfile(Wall):
         self.profile = profile
         # Get post form
         self.author_post_form = PostForm()
-        # Get all user's posts & associated comments
-        self.posts = Post.objects.filter(
-            wall=self.profile).order_by('-submit_date')
-        # # Get post objects
-        self.post_objects_list = []
-        for post in self.posts:
-            self.post_objects_list.append({'post_object': {
-                'post': post,
-                'author_comment_form': CommentForm(),
-                }
-            })
+        # Update wall with all posts and post objects
+        self.update_wall()

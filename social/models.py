@@ -1,11 +1,70 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals  # utile ?
+from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+# from django.contrib.sites.models import Site  # utile ?
+from django.utils import timezone
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
 # from django.core.exceptions import ValidationError
+
+
+def get_elapsed_time(date_start, date_end):
+    MONTHS = {
+        1: 'janvier',
+        2: 'février',
+        3: 'mars',
+        4: 'avril',
+        5: 'mai',
+        6: 'juin',
+        7: 'juillet',
+        8: 'août',
+        9: 'septembre',
+        10: 'octobre',
+        11: 'novembre',
+        12: 'décembre',
+    }
+
+    if date_start > date_end:
+        raise ValueError('date_end must be greater that date_start')
+    day_number_start = date_start.month*12 + date_start.day
+    day_number_end = date_end.month*12 + date_end.day
+    # If start day and end day are the same
+    if day_number_start == day_number_end:
+        past_seconds_from_date = (date_end - date_start).seconds
+        if past_seconds_from_date < 60:
+            past_time_from_date = 'Il y a moins d\'une minute'
+        elif past_seconds_from_date < 3600:
+            past_minutes_from_date = past_seconds_from_date / 60
+            if past_minutes_from_date < 2:
+                past_time_from_date = 'Il y a 1 minute'
+            else:
+                past_time_from_date = 'Il y a {} minutes'.format(
+                    int(round(past_minutes_from_date, 0)))
+        elif past_seconds_from_date < 86400:
+            past_hours_from_date = past_seconds_from_date / 3600
+            if past_hours_from_date < 2:
+                past_time_from_date = 'Il y a 1 heure'
+            else:
+                past_time_from_date = 'Il y a {} heures'.format(
+                    int(round(past_hours_from_date, 0)))
+        else:
+            past_time_from_date = date_start
+    # If start day is the day before end day
+    elif day_number_start == (day_number_end-1):
+        past_time_from_date = 'Hier, à {}'.format(
+            date_start.time().strftime('%Hh%M'))
+    # Else, start day is more or equal than 2 days before end day
+    else:
+        past_time_from_date = 'Le {} {}, à {}'.format(
+            date_start.strftime('%d'),
+            MONTHS[date_start.month],
+            date_start.time().strftime('%Hh%M'))
+
+    # Reste le cas particulier du 1er janvier à traiter !
+
+    return past_time_from_date
 
 COMMENT_MAX_LENGTH = 1000
 VALID_IMG_EXTENSIONS = [
@@ -71,15 +130,6 @@ class PostCommentAbstract(models.Model):
         abstract = True
         ordering = ('submit_date', )
 
-    # profile = models.ForeignKey(
-    #     # settings.AUTH_USER_MODEL,
-    #     'social.Profile',
-    #     verbose_name='profile',
-    #     blank=True,
-    #     null=True,
-    #     related_name="%(class)s_comments",
-    #     on_delete=models.SET_NULL,
-    # )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Auteur',
@@ -116,11 +166,11 @@ class PostCommentAbstract(models.Model):
         'be displayed instead.',
     )
 
-    def __str__(self):
-        return "%s: %s..." % (self.author, self.content[:50])
+    def get_past_time_from_submit_date(self):
+        now = timezone.now()
+        past_time_from_submit_date = get_elapsed_time(self.submit_date, now)
 
-    # def __str__(self):
-    #     return "Commentaire {0}".format(self.content)
+        return past_time_from_submit_date
 
     def get_absolute_url(self, anchor_pattern="#c%(id)s"):
         return self.get_content_object_url() + (anchor_pattern % self.__dict__)
@@ -135,8 +185,8 @@ class PostCommentAbstract(models.Model):
             'comment': self.comment,
             'domain': self.site.domain,
         }
-        return 'Posted by %(author)s '
-        'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s' % d
+        return 'Posted by %(profile)s '
+        'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s' % d
 
 
 class Post(PostCommentAbstract):
@@ -144,13 +194,6 @@ class Post(PostCommentAbstract):
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
 
-    # comments = models.ManyToManyField(
-    #     'social.Comment',
-    #     blank=True,
-    #     null=True,
-    #     verbose_name='Commentaires relatifs',
-    #     related_name='comments',
-    # )
     wall = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Publié sur le mur de',
@@ -159,6 +202,9 @@ class Post(PostCommentAbstract):
         # related_name="%(class)s_comments",
         related_name="wall",
     )
+
+    def __str__(self):
+        return "Post de %s : %s..." % (self.author, self.content[:50])
 
 
 class Comment(PostCommentAbstract):
@@ -173,4 +219,8 @@ class Comment(PostCommentAbstract):
         null=False,
         # related_name="%(class)s_comments",
         # on_delete=models.SET_NULL,
+        # related_name="wall",
         )
+
+    def __str__(self):
+        return "Commentaire de %s : %s..." % (self.author, self.content[:50])

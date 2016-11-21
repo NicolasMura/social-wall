@@ -4,7 +4,7 @@
 
 {% block h1 %}
   {# Si on est sur le wall_home) #}
-  {% if not wall_profile %}
+  {% if wall_home %}
     Bienvenue sur le mur d'OpenFaceRooms
   {% else %}  
     {# Si wall_profile = user #}
@@ -20,22 +20,19 @@
 {% block content %}
   {% if user.is_authenticated %}
     {# Si on est sur le wall_home) #}
-    {% if wall_home and wall_home.posts.count = 0 %}
+    {% if wall_home and wall_home.post_objects_list|length = 0 %}
       <p>Le mur d'OpenFaceRoom est vide : soyez le premier à réagir !</p>
-    {% else %}
-      {# Si aucun commentaire sur ce mur #}
-      {% if wall_profile.posts.count = 0 %}
-        {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
-        {% if wall_profile.profile = user %}
-          <p>Votre mur est vide : postez votre premier commentaire !</p>
-        {# Sinon... #}
-        {% else %}
-          <p>Le mur de {{ wall_profile.profile.username }} est vide : écrivez-lui !</p>
-        {% endif %}
-      {% endif %}
+    {% endif %}
+    {# Si l'utilisateur connecté est sur son mur #}
+    {% if wall_profile and wall_profile.profile = user and wall_profile.post_objects_list|length = 0 %}
+        <p>Votre mur est vide : postez votre première publication !</p>
+    {% endif %}
+    {# Si l'utilisateur connecté est sur le mur d'un autre utilisateur #}
+    {% if wall_profile and wall_profile.profile != user and wall_profile.post_objects_list|length = 0 %}  
+        <p>Le mur de {{ wall_profile.profile.username }} est vide : écrivez-lui !</p>
     {% endif %}
   {% else %}
-    <p>Vous devez <a href="{% url 'social:generic-signup-view' %}">vous inscrire</a> ou vous <a href="{% url 'social:generic-login-view' %}">vous connecter</a> pour pouvoir vous exprimer.</p>
+    <p>Vous devez <a href="{% url 'social:user-profile-signup-view' %}">vous inscrire</a> ou vous <a href="{% url 'social:generic-login-view' %}">vous connecter</a> pour pouvoir vous exprimer.</p>
   {% endif %}
   <div class="row">
     {% block wall_top_form %}{% endblock wall_top_form %}

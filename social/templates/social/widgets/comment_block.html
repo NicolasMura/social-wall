@@ -25,7 +25,7 @@
       {% else %}
         <b>{{ comment.author }}</b>
       {% endif %}
-      <p><i class="date">{{ comment.submit_date }}</i></p>
+      <p><i class="date">{{ comment.get_past_time_from_submit_date }}</i></p>
     </div>
   </div>
   <div class="row">

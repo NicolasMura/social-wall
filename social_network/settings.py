@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# See https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -97,39 +97,30 @@ DATABASES = {
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
+# See https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'fr-FR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+# See https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-# STATIC_ROOT = BASE_DIR  # Marche pas (doit être diff de MEDIA_ROOT)
 STATIC_URL = '/s/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-# RP-server
-# PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__)) + '/'
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static/')
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 AUTH_USER_MODEL = 'social.Profile'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/m/'
-
-# RP-server :
-# MEDIA_URL = '/m/'
-# STATIC_URL = '/s/'

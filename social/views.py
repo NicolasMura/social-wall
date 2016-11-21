@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, FormView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 import re
 
-from .wall_profile import get_wall_home, get_wall_profile
+from .wall import get_wall_home, get_wall_profile
 
 
 class AppView(View):
     """
-    A DOCUMENTER
+    Base view for Social Wall's views
     """
     def __init__(self, *args, **kwargs):
         self.context = {}
@@ -29,7 +32,7 @@ class AppView(View):
 
 class WallView(AppView):
     """
-    A DOCUMENTER
+    This view call a WallHome Python object and returns it to context
     """
     template_name = "social/wall_home.html"
 
@@ -43,21 +46,18 @@ class WallView(AppView):
         return render(request, self.template_name, self.context)
 
     def post(self, request):
+        # May be mutualised with WallProfileView's post method
         wall_home = get_wall_home()
         post_dict = self.request.POST
-        # print(post_dict)
 
         # If a post has been posted
         if 'submit-user-post' in post_dict:
-            print("POST submit-user-post")
             wall_home.process_user_post(request=request)
 
         # If a comment has been posted
         reg_exp = r'^(submit-user-comment-\d+)'
         for key, value in post_dict.items():
             if re.search(reg_exp, key):
-                post_pk = re.sub('submit-user-comment-', '', key)
-                print("POST submit-user-comment-"+post_pk)
                 wall_home.process_user_comment(request=request)
         self.context.update({
             'wall_home': wall_home,
@@ -70,12 +70,13 @@ class WallView(AppView):
 
 class WallProfileView(AppView):
     """
-    A DOCUMENTER
+    This view call a WallProfile Python object and returns it to context
     """
     template_name = "social/wall_profile.html"
 
-    def get(self, request, profile):
-        profile = Profile.objects.get(username=profile)
+    def get(self, request, username):
+        print("Username : ", username)
+        profile = Profile.objects.get(username=username)
         wall_profile = get_wall_profile(
                 profile=profile)
         self.context.update({
@@ -83,16 +84,15 @@ class WallProfileView(AppView):
         })
         return render(request, self.template_name, self.context)
 
-    def post(self, request, profile):
-        profile = Profile.objects.get(username=profile)
+    def post(self, request, username):
+        # May be mutualised with WallHomeView's post method
+        profile = Profile.objects.get(username=username)
         wall_profile = get_wall_profile(
                 profile=profile)
 
         if 'submit-user-post' in self.request.POST:
-            print("POST submit-user-post")
             wall_profile.process_user_post(request=request)
         if 'submit-user-comment' in self.request.POST:
-            print("POST submit-user-comment")
             wall_profile.process_user_comment(request=request)
         self.context.update({
             'wall_profile': wall_profile,
@@ -103,15 +103,9 @@ class WallProfileView(AppView):
         return render(request, self.template_name, self.context)
 
 
-class UserProfileCreateView(SuccessMessageMixin, CreateView):
-    """
-    Signup class based on generic CreateView class.
-    Needs to overwrite form_valid method to save avatar.
-    """
-
-    model = ProfileForm
-    template_name = 'social/signup.html'
-    form_class = ProfileForm
+class LoginView(SuccessMessageMixin, FormView):
+    form_class = AuthenticationForm
+    template_name = 'social/login.html'
     # Redirection to user's wall doesn't work - To correct :
     # success_url = reverse_lazy(
     #     'social:wall-profile-view',
@@ -120,7 +114,37 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy(
         'social:wall-view',
     )
-    # print(success_url)
+    success_message = 'Heureux de vous revoir, %(username)s!'
+
+    def form_valid(self, form):
+        user = form.get_user()
+        login(self.request, user)
+
+        return super(LoginView, self).form_valid(form)
+
+    # def get_success_url(self, **kwargs):
+    #     return reverse_lazy(
+    #         'social:wall-profile-view',
+    #         kwargs={'username': kwargs['username']})
+
+
+class UserProfileCreateView(SuccessMessageMixin, CreateView):
+    """
+    Signup class based on generic CreateView class.
+    Needs to overwrite form_valid method to login after create.
+    """
+
+    # model = Profile
+    form_class = ProfileCreationForm
+    template_name = 'social/signup.html'
+    # Redirection to user's wall doesn't work - To correct :
+    # success_url = reverse_lazy(
+    #     'social:wall-profile-view',
+    #     kwargs={'profile': '%(username)s'},
+    # )
+    success_url = reverse_lazy(
+        'social:wall-view',
+    )
     success_message = _(
         'Vous êtes désormais inscrit(e) '
         'sur OpenFaceRoom, %(username)s !')

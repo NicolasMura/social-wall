@@ -9,7 +9,7 @@
 {% block content %}
 <div class="row">
   <div class="col-xs-12">
-    <form method="post" enctype="multipart/form-data" action="{% url 'social:generic-signup-view' %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-signup-view' %}">
       {% csrf_token %}
       {{ form.as_p }}
       <p>

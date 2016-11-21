@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals  # utile ?
+from __future__ import unicode_literals
 
 from django.contrib import admin
 # from django.contrib.auth import get_user_model
@@ -14,13 +14,20 @@ from django_comments.views.moderation import (
 from .models import Profile, Post, Comment
 
 
-def moderer_comments(modeladmin, request, queryset):
-    """ Applique une modification en masse sur plusieurs entrées
-    Ici, on met is_visible à False pour toutes les entrées
-    sélectionnés. Cette action était optionelle dans l'activité ;) """
+def moderate_comments(modeladmin, request, queryset):
+    """ Set is_removed à True to all selected entries."""
     queryset.update(is_removed=True)
 
-moderer_comments.short_description = "Modérer les commentaires sélectionnés"
+moderate_comments.short_description = "Modérer (désactiver) "\
+    "les commentaires sélectionnés"
+
+
+def cancel_comments_moderation(modeladmin, request, queryset):
+    """ Set is_removed à False to all selected entries."""
+    queryset.update(is_removed=False)
+
+cancel_comments_moderation.short_description = "Rétablir (activer) "\
+    "les commentaires sélectionnés"
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -29,22 +36,22 @@ class ProfileAdmin(admin.ModelAdmin):
         can_delete = False
         verbose_name_plural = 'Profils utilisateurs'
 
-        # inlines = [
-        #     CommentInline
-        # ]
-
 
 class CommentInline(admin.TabularInline):
-    model = Post
+    model = Comment
 
 
 class PostAdmin(admin.ModelAdmin):
+    list_display = (
+        'author',
+        'submit_date',
+        'wall',
+        'preview',
+        'is_public',
+        'is_removed',
+    )
+
     fieldsets = (
-        # (
-        #     None,
-        #     {'fields': ('content_type', 'object_pk', 'site')}
-        #     {'fields': ('content_type', 'object_pk', 'site')}
-        # ),
         (
             _('Content'),
             {'fields': ('author', 'content')}
@@ -55,20 +62,16 @@ class PostAdmin(admin.ModelAdmin):
         ),
     )
 
-    list_display = (
-        'author',
-        'submit_date',
-        'wall',
-        'preview',
-        'is_public',
-        'is_removed',
-    )
     list_filter = ('submit_date', 'is_public', 'is_removed')
     date_hierarchy = 'submit_date'
     ordering = ('-submit_date',)
     # raw_id_fields = ('user',)
     search_fields = ('content', 'author', 'email')
     actions = ["approve_comments", "remove_comments"]
+
+    inlines = [
+        CommentInline
+    ]
 
     def preview(self, post):
         if len(post.content) > 50:
@@ -79,7 +82,7 @@ class PostAdmin(admin.ModelAdmin):
     preview.short_description = 'Aperçu du post'
 
     # Actions personnalisées
-    actions = [moderer_comments]
+    actions = [moderate_comments, cancel_comments_moderation]
 
     def get_actions(self, request):
         actions = super(PostAdmin, self).get_actions(request)
@@ -132,11 +135,6 @@ class PostAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = (
-        # (
-        #     None,
-        #     {'fields': ('content_type', 'object_pk', 'site')}
-        #     {'fields': ('content_type', 'object_pk', 'site')}
-        # ),
         (
             _('Content'),
             # {'fields': ('user', 'user_name', 'user_email', 'comment')}
@@ -163,6 +161,9 @@ class CommentAdmin(admin.ModelAdmin):
         return comment.content
 
     preview.short_description = 'Aperçu du commentaire'
+
+    # Actions personnalisées
+    actions = [moderate_comments, cancel_comments_moderation]
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
