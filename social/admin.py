@@ -3,13 +3,13 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 # from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _, ungettext
+# from django.utils.translation import ugettext_lazy as _, ungettext
 
 # from django_comments import get_model
-from django_comments.views.moderation import (
-    perform_flag,
-    perform_approve, perform_delete
-)
+# from django_comments.views.moderation import (
+#     perform_flag,
+#     perform_approve, perform_delete
+# )
 
 from .models import Profile, Post, Comment
 
@@ -96,41 +96,41 @@ class PostAdmin(admin.ModelAdmin):
                 actions.pop('remove_comments')
         return actions
 
-    def flag_comments(self, request, queryset):
-        self._bulk_flag(request, queryset, perform_flag,
-                        lambda n: ungettext('flagged', 'flagged', n))
+    # def flag_comments(self, request, queryset):
+    #     self._bulk_flag(request, queryset, perform_flag,
+    #                     lambda n: ungettext('flagged', 'flagged', n))
 
-    flag_comments.short_description = _("Flag selected comments")
+    # flag_comments.short_description = _("Flag selected comments")
 
-    def approve_comments(self, request, queryset):
-        self._bulk_flag(request, queryset, perform_approve,
-                        lambda n: ungettext('approved', 'approved', n))
+    # def approve_comments(self, request, queryset):
+    #     self._bulk_flag(request, queryset, perform_approve,
+    #                     lambda n: ungettext('approved', 'approved', n))
 
-    approve_comments.short_description = _("Approve selected comments")
+    # approve_comments.short_description = _("Approve selected comments")
 
-    def remove_comments(self, request, queryset):
-        self._bulk_flag(request, queryset, perform_delete,
-                        lambda n: ungettext('removed', 'removed', n))
+    # def remove_comments(self, request, queryset):
+    #     self._bulk_flag(request, queryset, perform_delete,
+    #                     lambda n: ungettext('removed', 'removed', n))
 
-    remove_comments.short_description = _("Remove selected comments")
+    # remove_comments.short_description = _("Remove selected comments")
 
-    def _bulk_flag(self, request, queryset, action, done_message):
-        """
-        Flag, approve, or remove some comments from an admin action. Actually
-        calls the `action` argument to perform the heavy lifting.
-        """
-        n_comments = 0
-        for comment in queryset:
-            action(request, comment)
-            n_comments += 1
+    # def _bulk_flag(self, request, queryset, action, done_message):
+    #     """
+    #     Flag, approve, or remove some comments from an admin action. Actually
+    #     calls the `action` argument to perform the heavy lifting.
+    #     """
+    #     n_comments = 0
+    #     for comment in queryset:
+    #         action(request, comment)
+    #         n_comments += 1
 
-        msg = ungettext('%(count)s comment was successfully %(action)s.',
-                        '%(count)s comments were successfully %(action)s.',
-                        n_comments)
-        self.message_user(request, msg % {
-            'count': n_comments,
-            'action': done_message(n_comments),
-            })
+    #     msg = ungettext('%(count)s comment was successfully %(action)s.',
+    #                     '%(count)s comments were successfully %(action)s.',
+    #                     n_comments)
+    #     self.message_user(request, msg % {
+    #         'count': n_comments,
+    #         'action': done_message(n_comments),
+    #         })
 
 
 class CommentAdmin(admin.ModelAdmin):
