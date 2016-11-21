@@ -95,3 +95,4 @@ ENV/
 db.sqlite3
 upload/
 __pycache__
+*.pyc
