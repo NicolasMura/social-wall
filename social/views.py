@@ -75,7 +75,6 @@ class WallProfileView(AppView):
     template_name = "social/wall_profile.html"
 
     def get(self, request, username):
-        print("Username : ", username)
         profile = Profile.objects.get(username=username)
         wall_profile = get_wall_profile(
                 profile=profile)
@@ -89,11 +88,17 @@ class WallProfileView(AppView):
         profile = Profile.objects.get(username=username)
         wall_profile = get_wall_profile(
                 profile=profile)
+        post_dict = self.request.POST
 
-        if 'submit-user-post' in self.request.POST:
+        # If a post has been posted
+        if 'submit-user-post' in post_dict:
             wall_profile.process_user_post(request=request)
-        if 'submit-user-comment' in self.request.POST:
-            wall_profile.process_user_comment(request=request)
+
+        # If a comment has been posted
+        reg_exp = r'^(submit-user-comment-\d+)'
+        for key, value in post_dict.items():
+            if re.search(reg_exp, key):
+                wall_profile.process_user_comment(request=request)
         self.context.update({
             'wall_profile': wall_profile,
         })

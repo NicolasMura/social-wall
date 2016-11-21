@@ -2,6 +2,9 @@
 from .models import Post
 from .forms import PostForm, CommentForm
 from django.contrib import messages
+from django.db.models import Q
+import operator
+from functools import reduce
 
 
 def get_wall_home():
@@ -44,9 +47,11 @@ class Wall(object):
 
         # TO BE SIMPLIFIED
         for post_object in self.post_objects_list:
+            print("OK")
             if post_object['post_object']['post'] == related_post:
                 index_post_object_in_list = self.post_objects_list.index(post_object)
                 self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'] = CommentForm(request.POST)
+                print(self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'])
         if self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'].is_valid():
             print("author_comment_form POST OK !")
             self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'].save()
@@ -63,20 +68,30 @@ class Wall(object):
 
     def update_wall(self):
         """
-        Update posts & post_objects_list's wall after processing user's
-        post or comment
+        Update posts & post_objects_list's wall :
+        - at wall init
+        or
+        - after processing user's post or comment
         """
 
         # Get all posts from all users associated comments
         if self.profile:
+            conditions = [
+                ('wall', self.profile),
+                ('is_public', True),
+                ('is_removed', False)
+            ]
+            objects_Q = [Q(x) for x in conditions]
             self.posts = Post.objects.filter(
-                wall=self.profile,
-                is_public=True,
-                is_removed=False).order_by('-submit_date')
+                reduce(operator.and_, objects_Q)).order_by('-submit_date')
         else:
+            conditions = [
+                ('is_public', True),
+                ('is_removed', False)
+            ]
+            objects_Q = [Q(x) for x in conditions]
             self.posts = Post.objects.filter(
-                is_public=True,
-                is_removed=False).order_by('-submit_date')
+                reduce(operator.and_, objects_Q)).order_by('-submit_date')
         self.post_objects_list = []
 
         # Get all post objects
