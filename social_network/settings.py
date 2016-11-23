@@ -80,19 +80,20 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 # See https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-    # Production :
+    # Local
     # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'social_network',
-    #     'USER': 'nmura',
-    #     'PASSWORD': '4SVTGSwhGQj&74x2',
-    #     'HOST': '127.0.0.1',  # Si bdd sur une autre machine
-    #     'PORT': '',  # Si bdd utilise un autre port que celui par défaut
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
+    # Production :
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'social_network_prod',
+        'USER': 'social',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 
