@@ -48,6 +48,7 @@
                   <ul class="dropdown-menu">
                     <li><a href="{% url 'social:wall-view' %}">Fil d'actualités</a></li>
                     <li><a href="{% url 'social:wall-profile-view' user.username %}">Mon mur</a></li>
+                    <li><a href="{% url 'social:user-profile-update-view' user.pk %}">Mon profil</a></li>
                     <li><a href="{% url 'social:generic-logout' %}">Déconnexion</a></li>
                   </ul>
                 </li>

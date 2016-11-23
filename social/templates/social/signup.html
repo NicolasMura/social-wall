@@ -7,18 +7,17 @@
 
 
 {% block content %}
-<div class="row">
-  <div class="col-xs-12">
-    <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-signup-view' %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <p>
-        <button type="submit" class="btn btn-primary">Je m'inscris !</button>
-        <!-- <input type="submit" value="Je m'inscris !" /> -->
-      </p>
-    </form>
+  <div class="row">
+    <div class="col-xs-12">
+      <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-signup-view' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+          <button type="submit" class="btn btn-primary">Je m'inscris !</button>
+        </p>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock content %}
 
 

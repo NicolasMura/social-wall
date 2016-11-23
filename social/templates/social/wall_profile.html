@@ -4,9 +4,9 @@
 {% block title %}{{ wall_profile.profile }}'s wall{% endblock %}
 
 
-{% block wall_top_form %}
+{% block wall_top_block %}
   {% include 'social/widgets/top_post_form.html' with wall=wall_profile user=user %}
-{% endblock wall_top_form %}
+{% endblock wall_top_block %}
 
 
 {% block wall_posts %}

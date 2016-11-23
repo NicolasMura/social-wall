@@ -26,7 +26,7 @@ SECRET_KEY = '80-9_*26o8$124q@cd6133t$cj0=26pwsoa#t^7p@h3+wa$^5p'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['']
+ALLOWED_HOSTS = ['192.168.1.2']
 
 
 # Application definition
@@ -122,5 +122,5 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 AUTH_USER_MODEL = 'social.Profile'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/'
-MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/m/'

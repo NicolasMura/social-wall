@@ -23,7 +23,6 @@ class Wall(object):
         """
         self.author_post_form = PostForm(request.POST)
         if self.author_post_form.is_valid():
-            print("form POST OK !")
             self.author_post_form.save()
             # Clean form
             self.author_post_form = PostForm()
@@ -35,8 +34,6 @@ class Wall(object):
                 messages.SUCCESS,
                 'Votre message a été publié !'
             )
-        else:
-            print("author_post_form POST NOK !")
 
     def process_user_comment(self, request):
         """
@@ -47,13 +44,11 @@ class Wall(object):
 
         # TO BE SIMPLIFIED
         for post_object in self.post_objects_list:
-            print("OK")
             if post_object['post_object']['post'] == related_post:
-                index_post_object_in_list = self.post_objects_list.index(post_object)
+                index_post_object_in_list = self.post_objects_list.index(
+                    post_object)
                 self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'] = CommentForm(request.POST)
-                print(self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'])
         if self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'].is_valid():
-            print("author_comment_form POST OK !")
             self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'].save()
             # Clean form
             self.post_objects_list[index_post_object_in_list]['post_object']['author_comment_form'] = CommentForm()
@@ -63,8 +58,6 @@ class Wall(object):
                 messages.SUCCESS,
                 'Votre commentaire a été publié !'
             )
-        else:
-            print("author_comment_form POST NOK !")
 
     def update_wall(self):
         """

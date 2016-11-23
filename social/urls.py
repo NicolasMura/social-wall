@@ -38,6 +38,11 @@ urlpatterns = patterns(
         name='user-profile-signup-view',
     ),
     url(
+        r'^profile/edit/(?P<pk>\d+)$',
+        UserProfileUpdateView.as_view(),
+        name='user-profile-update-view',
+    ),
+    url(
         r'^wall/(?P<username>.+)$',
         # r'^profile/(?P<username>[\w.@+-]+)/$',
         # r'^Nikouz/$',

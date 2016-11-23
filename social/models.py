@@ -34,30 +34,30 @@ def get_elapsed_time(date_start, date_end):
     if day_number_start == day_number_end:
         past_seconds_from_date = (date_end - date_start).seconds
         if past_seconds_from_date < 60:
-            past_time_from_date = 'Il y a moins d\'une minute'
+            past_time_from_date = 'moins d\'une minute'
         elif past_seconds_from_date < 3600:
             past_minutes_from_date = past_seconds_from_date / 60
             if past_minutes_from_date < 2:
-                past_time_from_date = 'Il y a 1 minute'
+                past_time_from_date = '1 minute'
             else:
-                past_time_from_date = 'Il y a {} minutes'.format(
+                past_time_from_date = '{} minutes'.format(
                     int(round(past_minutes_from_date, 0)))
         elif past_seconds_from_date < 86400:
             past_hours_from_date = past_seconds_from_date / 3600
             if past_hours_from_date < 2:
-                past_time_from_date = 'Il y a 1 heure'
+                past_time_from_date = '1 heure'
             else:
-                past_time_from_date = 'Il y a {} heures'.format(
+                past_time_from_date = '{} heures'.format(
                     int(round(past_hours_from_date, 0)))
         else:
             past_time_from_date = date_start
     # If start day is the day before end day
     elif day_number_start == (day_number_end-1):
-        past_time_from_date = 'Hier, à {}'.format(
+        past_time_from_date = '{}'.format(
             date_start.time().strftime('%Hh%M'))
     # Else, start day is more or equal than 2 days before end day
     else:
-        past_time_from_date = 'Le {} {}, à {}'.format(
+        past_time_from_date = '{} {}, à {}'.format(
             date_start.strftime('%d'),
             MONTHS[date_start.month],
             date_start.time().strftime('%Hh%M'))
@@ -119,6 +119,28 @@ class Profile(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_past_time_from_subscription(self):
+        now = timezone.now()
+        day_number_start = self.date_joined.month*12 + self.date_joined.day
+        day_number_end = now.month*12 + now.day
+        # If start day and end day are the same
+        if day_number_start == day_number_end:
+            past_time_from_subscription = 'Inscrit depuis  '\
+             + get_elapsed_time(
+                self.date_joined, now)
+        # If start day is the day before end day
+        elif day_number_start == (day_number_end-1):
+            past_time_from_subscription = 'Inscrit depuis hier, à '\
+             + get_elapsed_time(
+                self.date_joined, now)
+        # Else, start day is more or equal than 2 days before end day
+        else:
+            past_time_from_subscription = 'Inscrit depuis le '\
+             + get_elapsed_time(
+                self.date_joined, now)
+
+        return past_time_from_subscription
+
 
 # @python_2_unicode_compatible
 class PostCommentAbstract(models.Model):
@@ -146,7 +168,7 @@ class PostCommentAbstract(models.Model):
         blank=False,
     )
 
-    # Metadata about the comment
+    # Metadata about the post/comment
     submit_date = models.DateTimeField(
         verbose_name='Date de publication',
         auto_now_add=True,
@@ -168,7 +190,20 @@ class PostCommentAbstract(models.Model):
 
     def get_past_time_from_submit_date(self):
         now = timezone.now()
-        past_time_from_submit_date = get_elapsed_time(self.submit_date, now)
+        day_number_start = self.submit_date.month*12 + self.submit_date.day
+        day_number_end = now.month*12 + now.day
+        # If start day and end day are the same
+        if day_number_start == day_number_end:
+            past_time_from_submit_date = 'Il y a ' + get_elapsed_time(
+                self.submit_date, now)
+        # If start day is the day before end day
+        elif day_number_start == (day_number_end-1):
+            past_time_from_submit_date = 'Hier, à ' + get_elapsed_time(
+                self.submit_date, now)
+        # Else, start day is more or equal than 2 days before end day
+        else:
+            past_time_from_submit_date = 'Le ' + get_elapsed_time(
+                self.submit_date, now)
 
         return past_time_from_submit_date
 
@@ -177,7 +212,7 @@ class PostCommentAbstract(models.Model):
 
     def get_as_text(self):
         """
-        Return this comment as plain text.  Useful for emails.
+        Return this comment as plain text. Useful for emails.
         """
         d = {
             'profile': self.profile,

@@ -1,0 +1,44 @@
+{% extends 'social/base.html' %}
+
+{% block title %}Mettre à jour votre profil{% endblock %}
+
+
+{% block h1 %}Mettre à jour votre profil{% endblock h1 %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-xs-12 top-block">
+      <div class="row">
+        <div class="col-xs-2 col-sm-1 text-center">
+          <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+        </div>
+        <div class="col-xs-10 col-sm-11 subscribed-from">
+          <p>{{ user.get_past_time_from_subscription }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <h3>Vos informations</h3>
+    </div>
+    <div class="col-xs-12 block-infos">
+      <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-update-view' user.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+          <button type="submit" class="btn btn-primary">Valider</button>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+
+
+{% block page_javascript %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('input[type!=file]').addClass("form-control");
+      $('.errorList li').addClass("alert alert-danger");  // Marche pas
+    })
+  </script>
+{% endblock page_javascript %}

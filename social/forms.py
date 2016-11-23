@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Profile, Post, Comment
 from django import forms
 # from django.utils.html import strip_tags (TO DO)
@@ -28,6 +28,12 @@ class ProfileCreationForm(UserCreationForm):
         user.save()
 
         return user
+
+
+class ProfileChangeForm(UserChangeForm):
+    class Meta:
+        model = Profile
+        fields = ['email', 'username', 'avatar']
 
 
 class PostForm(forms.ModelForm):

@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render
-from django.views.generic import View, CreateView, FormView
+from django.views.generic import View, CreateView, UpdateView, FormView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from .models import Profile
-from .forms import ProfileCreationForm
+from .forms import ProfileCreationForm, ProfileChangeForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 import re
@@ -165,3 +165,25 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
         )
         login(self.request, new_user)
         return valid
+
+
+class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
+    """
+    Update class based on generic UpdateView class.
+    """
+
+    # model = Profile  # Needs to declare model (or queryset or queryset)
+    form_class = ProfileChangeForm
+    template_name = 'social/update-profile.html'
+    # Redirection to user's profile doesn't work - To correct :
+    # success_url = reverse_lazy(
+    #     'social:user-profile-update-view',
+    #     kwargs={'pk': '%(pk)s'},
+    # )
+    success_url = reverse_lazy(
+        'social:user-profile-update-view',
+    )
+
+    def get_object(self, queryset=None):
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        return profile
