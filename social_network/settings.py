@@ -16,16 +16,12 @@ import os
 import socket
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '80-9_*26o8$124q@cd6133t$cj0=26pwsoa#t^7p@h3+wa$^5p'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.1.2']
 
@@ -80,24 +76,6 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 # Database
 # See https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    # Local
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
-    # Production :
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'social_wall_prod',
-    #     'USER': 'social-postgre-user',
-    #     'PASSWORD': 'social',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
-    # }
-}
-
-
 # Internationalization
 # See https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -124,6 +102,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 AUTH_USER_MODEL = 'social.Profile'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/m/'
 
 
@@ -131,6 +110,7 @@ ipaddress = socket.gethostbyname(socket.gethostname())
 if ipaddress == '192.168.1.2':
     SITE_ID = 1
     DEBUG = True
+    TEMPLATE_DEBUG = True
     SECRET_KEY = 'development_settings_secret_key'
     DATABASES = {
         'default': {
@@ -138,7 +118,6 @@ if ipaddress == '192.168.1.2':
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     # Email
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
