@@ -88,8 +88,8 @@ DATABASES = {
     # Production :
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'social_network_prod',
-        'USER': 'social',
+        'NAME': 'social_wall_prod',
+        'USER': 'social-user',
         'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '',
