@@ -89,8 +89,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'social_wall_prod',
-        'USER': 'social-user',
-        'PASSWORD': '123',
+        'USER': 'social-postgre-user',
+        'PASSWORD': 'social',
         'HOST': 'localhost',
         'PORT': '',
     }
