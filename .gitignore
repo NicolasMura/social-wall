@@ -93,7 +93,7 @@ ENV/
 # Ajout Nico
 .DS_Store
 db.sqlite3
-upload/
+media/
 __pycache__
 *.pyc
 py3env/
