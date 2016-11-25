@@ -116,7 +116,7 @@ class Profile(AbstractUser):
         # validators=[validate_image],
     )
 
-    def __str__(self):
+    def __unicode__(self):
         return self.username
 
     def get_past_time_from_subscription(self):
@@ -207,8 +207,8 @@ class PostCommentAbstract(models.Model):
 
         return past_time_from_submit_date
 
-    def get_absolute_url(self, anchor_pattern="#c%(id)s"):
-        return self.get_content_object_url() + (anchor_pattern % self.__dict__)
+    # def get_absolute_url(self, anchor_pattern="#c%(id)s"):
+    #     return self.get_content_object_url() + (anchor_pattern % self.__dict__)
 
     def get_as_text(self):
         """
@@ -238,7 +238,7 @@ class Post(PostCommentAbstract):
         related_name="wall",
     )
 
-    def __str__(self):
+    def __unicode__(self):
         return "Post de %s : %s..." % (self.author, self.content[:50])
 
 
@@ -257,5 +257,5 @@ class Comment(PostCommentAbstract):
         # related_name="wall",
         )
 
-    def __str__(self):
+    def __unicode__(self):
         return "Commentaire de %s : %s..." % (self.author, self.content[:50])
