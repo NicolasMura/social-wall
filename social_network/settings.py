@@ -20,9 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '80-9_*26o8$124q@cd6133t$cj0=26pwsoa#t^7p@h3+wa$^5p'
-
 ALLOWED_HOSTS = ['192.168.1.2']
 
 
@@ -95,6 +92,7 @@ USE_TZ = False
 
 STATIC_URL = '/s/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 AUTH_USER_MODEL = 'social.Profile'

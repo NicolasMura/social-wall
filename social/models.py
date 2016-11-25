@@ -112,7 +112,7 @@ class Profile(AbstractUser):
         blank=True,
         null=False,
         upload_to='upload/avatars',
-        default='static/avatars/default-avatar.png',
+        default='default/avatars/default-avatar.png',
         # validators=[validate_image],
     )
 
