@@ -98,4 +98,4 @@ __pycache__
 *.pyc
 py3env/
 production.py
-static/
+/static

@@ -16,7 +16,6 @@ import os
 import socket
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
-print("BASE_DIR : ", BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
