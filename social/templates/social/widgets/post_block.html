@@ -4,14 +4,14 @@
       {# Si le profil du mur affiché n'est pas l'auteur du post ou si on est sur le wall_home) #}
       {% if post_object.post.wall != post_object.post.author or wall = wall_home %}
         <a class="username not_dotted" href="{% url 'social:wall-profile-view' post_object.post.author %}">
-          <img class="wall-avatar" src="{{ post_object.post.author.avatar.url }}" width="50">
+          <img src="{{ post_object.post.author.avatar.url }}" width="50">
         </a>
       {# Sinon #}
       {% else %}
-        <img class="wall-avatar" src="{{ post_object.post.author.avatar.url }}" width="50">
+        <img src="{{ post_object.post.author.avatar.url }}" width="50">
       {% endif %}
     </div>
-    <div class="col-xs-10 col-sm-11 col-md-11 infos-user">
+    <div class="col-xs-10 col-sm-11 col-md-11">
       {# Si on est sur le wall_home) #}
       {% if not wall.profile %}
         <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.author %}">{{ post_object.post.author }}</a></b> {% if post_object.post.author != post_object.post.wall %}<i class="fa fa-arrow-right" aria-hidden="true"></i> <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.wall %}">{{ post_object.post.wall }}</a></b>{% endif %}

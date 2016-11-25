@@ -6,17 +6,17 @@
       {% if user.is_authenticated %}
         {# Si le profil du mur affiché est celui de l'utilisateur connecté #}
         {% if wall.profile = user %}
-        <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+        <img src="{{ user.avatar.url }}" width="50">
         {% else %}
         <a class="not_dotted" href="{% url 'social:wall-profile-view' user.username %}">
-          <img class="wall-avatar" src="{{ user.avatar.url }}" width="50">
+          <img src="{{ user.avatar.url }}" width="50">
         </a>
         {% endif %}
       {% else %}
-        <img class="wall-avatar" src="{% static 'social/avatars/default-avatar.png' %}" width="50">
+        <img src="{% static 'social/avatars/default-avatar.png' %}" width="50">
       {% endif %}
     </div>
-    <div class="col-xs-10 col-sm-11 post">
+    <div class="col-xs-10 col-sm-11">
       <form action="" method="POST" role="form">
         {% if wall.author_post_form.errors.content %}
         <div class="alert alert-danger">
