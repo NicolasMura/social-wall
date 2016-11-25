@@ -106,8 +106,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/m/'
 
 
-ipaddress = socket.gethostbyname(socket.gethostname())
-if ipaddress == '192.168.1.2':
+# Choose right settings additionnal configuration (dev or prod)
+HOST = socket.gethostname()
+if HOST != 'vps121400.ovh.net':
     SITE_ID = 1
     DEBUG = True
     TEMPLATE_DEBUG = True
@@ -118,7 +119,6 @@ if ipaddress == '192.168.1.2':
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-    # Email
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     from .production import *
