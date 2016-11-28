@@ -83,7 +83,7 @@ class PostCommentAbstract(models.Model):
         related_name="%(class)s_author",
         # on_delete=models.SET_NULL,
     )
-    content = models.CharField(
+    content = models.TextField(
         verbose_name=_('Commentaire'),
         max_length=COMMENT_MAX_LENGTH,
         default="",

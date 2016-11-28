@@ -25,19 +25,17 @@
         {% endif %}
         {% csrf_token %}
         <fieldset {% if not user.is_authenticated %}disabled{% endif %}>
-          <div class="input-group">
-            {% if user.is_authenticated %}
-              {{ wall.author_post_form.content }}
-              {# {{ wall.author_post_form.content|safe }} #}
-              <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
-              <input type="hidden" class="form-control" id="wall" name="wall" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
-            {% else %}
-              <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer">
-            {% endif %}
-            <span class="input-group-btn">
+          {% if user.is_authenticated %}
+            {{ wall.author_post_form.content }}
+            {# {{ wall.author_post_form.content|safe }} #}
+            <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
+            <input type="hidden" class="form-control" id="wall" name="wall" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
+          {% else %}
+            <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer">
+          {% endif %}
+          <!-- <span class="input-group-btn hidden"> -->
             <button type="submit" class="btn btn-primary" id="submit-user-post" name="submit-user-post">Envoyer</button>
-            </span>
-          </div>
+          <!-- </span> -->
         </fieldset>
       </form>
     </div>

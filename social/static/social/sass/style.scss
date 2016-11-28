@@ -42,6 +42,13 @@ h1{
     margin-bottom: 20px;
 }
 
+.top-block{
+    button#submit-user-post{
+        float: right;
+        margin-top: 5px;
+    }
+}
+
 .post-block-container{
     background-color: white;
     padding: 0px 10px 10px 10px;
@@ -49,48 +56,48 @@ h1{
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
     border-radius: 3px;
-}
 
-.username{
-    margin-bottom: 0px;
-}
-
-.date{
-    color: $secondary-grey-color;
-}
-
-.container{
-    a:hover{
-        color: $main-blue-color-hover;
-        border-bottom: 1px dotted;
-        text-decoration: none;
+    .username{
+        margin-bottom: 0px;
     }
-    a.not_dotted{
-        border-bottom: none;
+
+    .date{
+        color: $secondary-grey-color;
     }
-}
 
-.block-infos{
-    margin-top: 10px;
-    margin-bottom: 0px;
-}
-
-.fa-comment{
-    margin-left: 15px;
-}
-
-.comments-block-container{
-    // padding: 0px 35px 10px 27px;
-
-    .comments-block{
-        border: 1px solid $comments-block-border;
-        background-color: $comments-block-light-grey-background;
-        padding: 10px 15px 15px 15px;
+    .container{
+        a:hover{
+            color: $main-blue-color-hover;
+            border-bottom: 1px dotted;
+            text-decoration: none;
+        }
+        a.not_dotted{
+            border-bottom: none;
+        }
     }
-}
 
-.subscribed-from{
-    padding-top: 15px;
+    .block-infos{
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+
+    .fa-comment{
+        margin-left: 15px;
+    }
+
+    .comments-block-container{
+        // padding: 0px 35px 10px 27px;
+
+        .comments-block{
+            border: 1px solid $comments-block-border;
+            background-color: $comments-block-light-grey-background;
+            padding: 10px 15px 15px 15px;
+        }
+    }
+
+    .subscribed-from{
+        padding-top: 15px;
+    }
 }
 
 .jumbotron{

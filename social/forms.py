@@ -41,9 +41,10 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['content', 'author', 'wall']
         widgets = {
-            'content': forms.TextInput(attrs={
+            'content': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'post-form-content-input',
+                'rows': '2',
             }),
         }
 
