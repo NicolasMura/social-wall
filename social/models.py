@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.utils.translation import ugettext_lazy as _
 
 from django.conf import settings
 from django.db import models
@@ -8,63 +9,6 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
 # from django.core.exceptions import ValidationError
-
-
-def get_elapsed_time(date_start, date_end):
-    MONTHS = {
-        1: 'janvier',
-        2: 'février',
-        3: 'mars',
-        4: 'avril',
-        5: 'mai',
-        6: 'juin',
-        7: 'juillet',
-        8: 'août',
-        9: 'septembre',
-        10: 'octobre',
-        11: 'novembre',
-        12: 'décembre',
-    }
-
-    if date_start > date_end:
-        raise ValueError('date_end must be greater that date_start')
-    day_number_start = date_start.month*12 + date_start.day
-    day_number_end = date_end.month*12 + date_end.day
-    # If start day and end day are the same
-    if day_number_start == day_number_end:
-        past_seconds_from_date = (date_end - date_start).seconds
-        if past_seconds_from_date < 60:
-            past_time_from_date = 'moins d\'une minute'
-        elif past_seconds_from_date < 3600:
-            past_minutes_from_date = past_seconds_from_date / 60
-            if past_minutes_from_date < 2:
-                past_time_from_date = '1 minute'
-            else:
-                past_time_from_date = '{} minutes'.format(
-                    int(round(past_minutes_from_date, 0)))
-        elif past_seconds_from_date < 86400:
-            past_hours_from_date = past_seconds_from_date / 3600
-            if past_hours_from_date < 2:
-                past_time_from_date = '1 heure'
-            else:
-                past_time_from_date = '{} heures'.format(
-                    int(round(past_hours_from_date, 0)))
-        else:
-            past_time_from_date = date_start
-    # If start day is the day before end day
-    elif day_number_start == (day_number_end-1):
-        past_time_from_date = '{}'.format(
-            date_start.time().strftime('%Hh%M'))
-    # Else, start day is more or equal than 2 days before end day
-    else:
-        past_time_from_date = '{} {}, à {}'.format(
-            date_start.strftime('%d'),
-            MONTHS[date_start.month],
-            date_start.time().strftime('%Hh%M'))
-
-    # Reste le cas particulier du 1er janvier à traiter !
-
-    return past_time_from_date
 
 COMMENT_MAX_LENGTH = 1000
 VALID_IMG_EXTENSIONS = [
@@ -104,11 +48,11 @@ MAX_HEIGHT = 1080
 
 class Profile(AbstractUser):
     class Meta:
-        verbose_name = 'Profil utilisateur'
-        verbose_name_plural = 'Profils utilisateurs'
+        verbose_name = _('Profil utilisateur')
+        verbose_name_plural = _('Profils utilisateurs')
 
     avatar = models.FileField(
-        verbose_name="Votre avatar",
+        verbose_name=_("Votre avatar"),
         blank=True,
         null=False,
         upload_to='upload/avatars',
@@ -118,28 +62,6 @@ class Profile(AbstractUser):
 
     def __unicode__(self):
         return self.username
-
-    def get_past_time_from_subscription(self):
-        now = timezone.now()
-        day_number_start = self.date_joined.month*12 + self.date_joined.day
-        day_number_end = now.month*12 + now.day
-        # If start day and end day are the same
-        if day_number_start == day_number_end:
-            past_time_from_subscription = 'Inscrit depuis  '\
-             + get_elapsed_time(
-                self.date_joined, now)
-        # If start day is the day before end day
-        elif day_number_start == (day_number_end-1):
-            past_time_from_subscription = 'Inscrit depuis hier, à '\
-             + get_elapsed_time(
-                self.date_joined, now)
-        # Else, start day is more or equal than 2 days before end day
-        else:
-            past_time_from_subscription = 'Inscrit depuis le '\
-             + get_elapsed_time(
-                self.date_joined, now)
-
-        return past_time_from_subscription
 
 
 # @python_2_unicode_compatible
@@ -154,7 +76,7 @@ class PostCommentAbstract(models.Model):
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='Auteur',
+        verbose_name=_('Auteur'),
         blank=False,
         null=False,
         # related_name="%(class)s_comments",
@@ -162,7 +84,7 @@ class PostCommentAbstract(models.Model):
         # on_delete=models.SET_NULL,
     )
     content = models.CharField(
-        verbose_name='Commentaire',
+        verbose_name=_('Commentaire'),
         max_length=COMMENT_MAX_LENGTH,
         default="",
         blank=False,
@@ -170,42 +92,27 @@ class PostCommentAbstract(models.Model):
 
     # Metadata about the post/comment
     submit_date = models.DateTimeField(
-        verbose_name='Date de publication',
+        verbose_name=_('Date de publication'),
         auto_now_add=True,
         auto_now=False,
     )
     is_public = models.BooleanField(
-        verbose_name='public ?',
+        verbose_name=_('publique ?'),
         default=True,
-        help_text='Uncheck this box to make the comment effectively '
-        'disappear from the site.',
+        help_text=_(
+            'Uncheck this box to make the comment effectively '
+            'disappear from the site.'
+        ),
     )
     is_removed = models.BooleanField(
-        verbose_name='Désactivé ?',
+        verbose_name=_('Désactivé ?'),
         default=False,
-        help_text='Check this box if the comment is inappropriate. '
-        'A "This comment has been removed" message will '
-        'be displayed instead.',
+        help_text=_(
+            'Check this box if the comment is inappropriate. '
+            'A "This comment has been removed" message will '
+            'be displayed instead.'
+        ),
     )
-
-    def get_past_time_from_submit_date(self):
-        now = timezone.now()
-        day_number_start = self.submit_date.month*12 + self.submit_date.day
-        day_number_end = now.month*12 + now.day
-        # If start day and end day are the same
-        if day_number_start == day_number_end:
-            past_time_from_submit_date = 'Il y a ' + get_elapsed_time(
-                self.submit_date, now)
-        # If start day is the day before end day
-        elif day_number_start == (day_number_end-1):
-            past_time_from_submit_date = 'Hier, à ' + get_elapsed_time(
-                self.submit_date, now)
-        # Else, start day is more or equal than 2 days before end day
-        else:
-            past_time_from_submit_date = 'Le ' + get_elapsed_time(
-                self.submit_date, now)
-
-        return past_time_from_submit_date
 
     # def get_absolute_url(self, anchor_pattern="#c%(id)s"):
     #     return self.get_content_object_url() + (anchor_pattern % self.__dict__)
@@ -220,18 +127,20 @@ class PostCommentAbstract(models.Model):
             'comment': self.comment,
             'domain': self.site.domain,
         }
-        return 'Posted by %(profile)s '
-        'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s' % d
+        return _(
+            'Posted by %(profile)s '
+            'at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s'
+        ) % d
 
 
 class Post(PostCommentAbstract):
     class Meta:
-        verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
+        verbose_name = _('Post')
+        verbose_name_plural = _('Posts')
 
     wall = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='Publié sur le mur de',
+        verbose_name=_('Publié sur le mur de'),
         blank=False,
         null=False,
         # related_name="%(class)s_comments",
@@ -239,7 +148,7 @@ class Post(PostCommentAbstract):
     )
 
     def __unicode__(self):
-        return "Post de %s : %s..." % (self.author, self.content[:50])
+        return _("Post de %s : %s...") % (self.author, self.content[:50])
 
 
 class Comment(PostCommentAbstract):
@@ -258,4 +167,5 @@ class Comment(PostCommentAbstract):
         )
 
     def __unicode__(self):
-        return "Commentaire de %s : %s..." % (self.author, self.content[:50])
+        return _(
+            "Commentaire de %s : %s...") % (self.author, self.content[:50])

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext as _
 from .models import Post
 from .forms import PostForm, CommentForm
 from django.contrib import messages
@@ -32,7 +33,7 @@ class Wall(object):
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                'Votre message a été publié !'
+                _('Votre message a été publié !')
             )
 
     def process_user_comment(self, request):
@@ -56,7 +57,7 @@ class Wall(object):
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                'Votre commentaire a été publié !'
+                _('Votre commentaire a été publié !')
             )
 
     def update_wall(self):

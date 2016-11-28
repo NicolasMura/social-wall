@@ -1,3 +1,5 @@
+{% load danatime %}
+
 <div class="col-xs-12">
   <div class="row">
     <div class="col-xs-2 col-sm-1 col-md-1 text-center">
@@ -25,7 +27,7 @@
       {% else %}
         <b>{{ comment.author }}</b>
       {% endif %}
-      <p><i class="date">{{ comment.get_past_time_from_submit_date }}</i></p>
+      <p><i class="date">{{ comment.submit_date|danatime }}</i></p>
     </div>
   </div>
   <div class="row">

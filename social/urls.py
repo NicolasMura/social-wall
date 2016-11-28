@@ -2,6 +2,7 @@
 # from django.contrib.auth.decorators import login_required
 from django.conf.urls import patterns, url
 from django.contrib.auth import views as auth_views
+from django.conf.urls import include
 
 from .views import *
 
@@ -49,5 +50,9 @@ urlpatterns = patterns(
         WallProfileView.as_view(),
         # login_required(WallProfileView.as_view()),
         name='wall-profile-view',
+    ),
+    url(
+        r'^i18n/',
+        include('django.conf.urls.i18n'),
     ),
 )

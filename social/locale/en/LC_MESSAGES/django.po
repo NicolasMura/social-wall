@@ -1,0 +1,135 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-28 14:31+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: social/admin.py:57 social/admin.py:140
+msgid "Content"
+msgstr ""
+
+#: social/admin.py:61 social/admin.py:145
+msgid "Metadata"
+msgstr ""
+
+#: social/models.py:108
+msgid "Profil utilisateur"
+msgstr ""
+
+#: social/models.py:109
+msgid "Profils utilisateurs"
+msgstr ""
+
+#: social/models.py:112
+msgid "Votre avatar"
+msgstr ""
+
+#: social/models.py:158
+msgid "Auteur"
+msgstr ""
+
+#: social/models.py:166
+msgid "Commentaire"
+msgstr ""
+
+#: social/models.py:174
+msgid "Date de publication"
+msgstr ""
+
+#: social/models.py:179
+msgid "publique ?"
+msgstr ""
+
+#: social/models.py:182
+msgid ""
+"Uncheck this box to make the comment effectively disappear from the site."
+msgstr ""
+
+#: social/models.py:187
+msgid "Désactivé ?"
+msgstr ""
+
+#: social/models.py:190
+msgid ""
+"Check this box if the comment is inappropriate. A \"This comment has been "
+"removed\" message will be displayed instead."
+msgstr ""
+
+#: social/models.py:229
+#, python-format
+msgid ""
+"Posted by %(profile)s at %(date)s\n"
+"\n"
+"%(comment)s\n"
+"\n"
+"http://%(domain)s"
+msgstr ""
+
+#: social/models.py:236
+msgid "Post"
+msgstr ""
+
+#: social/models.py:237
+msgid "Posts"
+msgstr ""
+
+#: social/models.py:241
+msgid "Publié sur le mur de"
+msgstr ""
+
+#: social/models.py:249
+#, python-format
+msgid "Post de %s : %s..."
+msgstr ""
+
+#: social/models.py:269
+#, python-format
+msgid "Commentaire de %s : %s..."
+msgstr ""
+
+#: social/templates/social/widgets/post_comments_block.html:13
+#, fuzzy
+#| msgid "commentaire"
+#| msgid_plural "commentaires"
+msgid "Pas de commentaire"
+msgstr "No comment"
+
+#: social/templates/social/widgets/post_comments_block.html:15
+msgid "commentaire"
+msgid_plural "commentaires"
+msgstr[0] "comment"
+msgstr[1] "comments"
+
+#: social/views.py:154
+#, python-format
+msgid "Vous êtes désormais inscrit(e) sur OpenFaceRoom, %(username)s !"
+msgstr ""
+
+#: social/wall.py:36
+msgid "Votre message a été publié !"
+msgstr ""
+
+#: social/wall.py:60
+msgid "Votre commentaire a été publié !"
+msgstr ""
+
+#: social_network/settings.py:100
+msgid "Français"
+msgstr "French"
+
+#: social_network/settings.py:101
+msgid "English"
+msgstr "Anglais"

@@ -15,6 +15,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import socket
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 
@@ -34,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     # 'bootstrap3',
     'social',
 )
@@ -47,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'social_network.urls'
@@ -68,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.i18n',
             ],
         },
     },
@@ -91,6 +95,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
+
+
+gettext = lambda x: x
+LANGUAGES = (
+   ('fr', gettext(_('Français'))),
+   ('en', gettext(_('English'))),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'social/locale/'),
+)
 
 
 # Static files (CSS, JavaScript, Images)
