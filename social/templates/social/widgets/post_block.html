@@ -2,7 +2,7 @@
 
 <div class="col-xs-12 block-infos">
   <div class="row">
-    <div class="col-xs-2 col-sm-1 col-md-1 text-center">
+    <div class="col-xs-2 col-sm-1 col-md-1">
       {# Si le profil du mur affiché n'est pas l'auteur du post ou si on est sur le wall_home) #}
       {% if post_object.post.wall != post_object.post.author or wall = wall_home %}
         <a class="username not_dotted" href="{% url 'social:wall-profile-view' post_object.post.author %}">

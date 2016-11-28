@@ -42,6 +42,15 @@ h1{
     margin-bottom: 20px;
 }
 
+.post-block-container{
+    background-color: white;
+    padding: 0px 10px 10px 10px;
+    margin: 10px 0px;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 3px;
+}
+
 .username{
     margin-bottom: 0px;
 }
@@ -71,7 +80,7 @@ h1{
 }
 
 .comments-block-container{
-    padding: 0px 35px 10px 27px;
+    // padding: 0px 35px 10px 27px;
 
     .comments-block{
         border: 1px solid $comments-block-border;
@@ -108,4 +117,8 @@ ul.errorlist{
     list-style-type: none;
     padding: 0px;
     margin:0px;
+}
+
+.clear{
+    clear:both;
 }
