@@ -13,7 +13,7 @@
   {# Si au moins 1 post sur ce mur #}
   {# A essayer : for - empty - endfor #}
   {% if wall_profile.post_objects_list|length > 0 %}
-    <div class="col-xs-12">    
+    <div class="col-xs-12 h3">    
       <h3>
         {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}Dernières publications sur votre mur{% else %}Dernières publications sur le mur de {{ wall_profile.profile.username }}{% endif %}
       </h3>

@@ -6,44 +6,45 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # from django.contrib.sites.models import Site  # utile ?
-from django.utils import timezone
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
-# from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 COMMENT_MAX_LENGTH = 1000
 VALID_IMG_EXTENSIONS = [
-        ".jpg",
-        ".jpeg",
-        '.png',
-        ".gif",
+        ".jpg", ".JPG",
+        ".jpeg", ".JPEG",
+        ".png", ".PNG",
+        ".gif", ".GIF",
     ]
-MEGABYTE_LIMIT = 2
-MAX_WIDTH = 1920
-MAX_HEIGHT = 1080
+MEGABYTE_LIMIT = 6
+MAX_WIDTH = 6000
+MAX_HEIGHT = 6000
 
 
-# def validate_image(
-#         fieldfile_obj,
-#         max_width=MAX_WIDTH,
-#         max_height=MAX_HEIGHT,
-#         max_size=MEGABYTE_LIMIT*1024*1024,
-#         valid_extensions=VALID_IMG_EXTENSIONS):
-#     if fieldfile_obj.file is None or fieldfile_obj.file.image is None:
-#         raise ValidationError("Erreur : fichier absent.")
-#     if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
-#         raise ValidationError(
-#             "Erreur : le format de l'image est incorrect ! "
-#             "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS))
-#     if (
-#         fieldfile_obj.file.image.width > max_width or
-#         fieldfile_obj.file.image.height > max_height
-#     ):
-#         raise ValidationError(
-#             "Erreur : l'image n'est pas au format autorisé (600 x 174 px).")
-#     if fieldfile_obj.file.image.size > max_size:
-#         raise ValidationError(
-#             "L'image dépasse la taille maximale "
-#             "autorisée ({} Mo)".format(MEGABYTE_LIMIT))
+def validate_image(
+        fieldfile_obj,
+        max_width=MAX_WIDTH,
+        max_height=MAX_HEIGHT,
+        max_size=MEGABYTE_LIMIT*1024*1024,
+        valid_extensions=VALID_IMG_EXTENSIONS):
+    if fieldfile_obj.name != "default/avatars/default-avatar.png":
+        if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
+            raise ValidationError(
+                "Erreur : le format de l'image est incorrect ! "
+                "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS))
+        if (
+            fieldfile_obj.file.image.width > max_width or
+            fieldfile_obj.file.image.height > max_height
+        ):
+            raise ValidationError(_(
+                "Erreur : les dimensions de l'image excèdent le maximum "
+                "autorisé ({} x {} px max).").format(MAX_WIDTH, MAX_HEIGHT))
+        img_width = fieldfile_obj.file.image.size[0]
+        img_height = fieldfile_obj.file.image.size[1]
+        if img_width*img_height > max_size:
+            raise ValidationError(
+                "L'image dépasse la taille maximale "
+                "autorisée ({} Mo)".format(MEGABYTE_LIMIT))
 
 
 class Profile(AbstractUser):
@@ -51,13 +52,13 @@ class Profile(AbstractUser):
         verbose_name = _('Profil utilisateur')
         verbose_name_plural = _('Profils utilisateurs')
 
-    avatar = models.FileField(
+    avatar = models.ImageField(
         verbose_name=_("Votre avatar"),
         blank=True,
         null=False,
         upload_to='upload/avatars',
         default='default/avatars/default-avatar.png',
-        # validators=[validate_image],
+        validators=[validate_image],
     )
 
     def __unicode__(self):
