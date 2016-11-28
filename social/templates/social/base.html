@@ -46,7 +46,10 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'admin:index' %}" target="_blank">Admin</a></li>
-                <li class="">
+                {% comment "language management" %}
+                    Passer en python3 sur le VPS avant d'activer la gestion des langues
+                {% endcomment %}
+                <!-- <li class="">
                   <a class="test" href="#">
                     <form action="{% url 'social:set_language' %}" method="post">
                       {% csrf_token %}
@@ -63,7 +66,7 @@
                       </select>
                     </form>
                   </a>
-                </li>
+                </li> -->
                 {% if user.is_authenticated %}
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="nav-avatar" src="{{ user.avatar.url }}" width="20"> {{ user.username }} <b class="caret"></b></a>
