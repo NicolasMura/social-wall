@@ -16,9 +16,9 @@ VALID_IMG_EXTENSIONS = [
         ".png", ".PNG",
         ".gif", ".GIF",
     ]
-MEGABYTE_LIMIT = 6
-MAX_WIDTH = 6000
-MAX_HEIGHT = 6000
+MEGABYTE_LIMIT = 2
+MAX_WIDTH = 1920
+MAX_HEIGHT = 1080
 
 
 def validate_image(
