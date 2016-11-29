@@ -149,7 +149,8 @@ class Post(PostCommentAbstract):
     )
 
     def __unicode__(self):
-        return _("Post de %s : %s...") % (self.author, self.content[:50])
+        return _("Post de %(author)s : %(content)s...") % {
+            'author': self.author, 'content': self.content[:50]}
 
 
 class Comment(PostCommentAbstract):
@@ -168,5 +169,5 @@ class Comment(PostCommentAbstract):
         )
 
     def __unicode__(self):
-        return _(
-            "Commentaire de %s : %s...") % (self.author, self.content[:50])
+        return _("Commentaire de %()s : %s...") % {
+            'author': self.author, 'content': self.content[:50]}

@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="col-xs-12">
   <!-- <a href="#comments-{{ post_object.post.pk }}" id="comments-{{ post_object.post.pk }}">hyperlink to comment #{{ post_object.post.pk }}</a> -->
   <form action="" method="POST" role="form">
@@ -15,13 +17,13 @@
           <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
           <input type="hidden" class="form-control" id="related_post" name="related_post" value="{{ post_object.post.pk }}">
         {% else %}
-          <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire">
+          <input type="text" class="form-control" placeholder="{% trans 'Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire' %}">
         {% endif %}
-        {% if user.is_authenticated %}<p>Appuyez sur Entrée pour publier.</p>{% endif %}
         <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary hidden" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">Envoyer</button>
+        <button type="submit" class="btn btn-primary" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">{% trans "Envoyer" %}</button>
         </span>
       </div>
+        {% if user.is_authenticated %}<span>{% trans "Appuyez sur Entrée pour publier." %}</span>{% endif %}
     </fieldset>
   </form>
 </div>

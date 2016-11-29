@@ -1,9 +1,10 @@
 {% extends 'social/base.html' %}
+{% load i18n %}
 
-{% block title %}Mettre à jour votre profil{% endblock %}
+{% block title %}{% trans "Mettre à jour votre profil" %}{% endblock %}
 
 
-{% block h1 %}Mettre à jour votre profil{% endblock h1 %}
+{% block h1 %}{% trans "Mettre à jour votre profil" %}{% endblock h1 %}
 
 
 {% block content %}
@@ -19,14 +20,14 @@
       </div>
     </div>
     <div class="col-xs-12">
-      <h3>Vos informations</h3>
+      <h3>{% trans "Vos informations" %}</h3>
     </div>
     <div class="col-xs-12 block-infos">
       <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-update-view' user.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
         <p>
-          <button type="submit" class="btn btn-primary">Valider</button>
+          <button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
         </p>
       </form>
     </div>

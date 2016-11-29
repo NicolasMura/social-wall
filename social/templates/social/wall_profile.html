@@ -1,7 +1,8 @@
 {% extends 'social/wall_base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}{{ wall_profile.profile }}'s wall{% endblock %}
+{% block title %}{% blocktrans with profile=wall_profile.profile %}Mur de {{ profile }}{% endblocktrans %}{% endblock %}
 
 
 {% block wall_top_block %}
@@ -15,7 +16,7 @@
   {% if wall_profile.post_objects_list|length > 0 %}
     <div class="col-xs-12 h3">    
       <h3>
-        {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}Dernières publications sur votre mur{% else %}Dernières publications sur le mur de {{ wall_profile.profile.username }}{% endif %}
+        {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}{% trans "Dernières publications sur votre mur" %}{% else %}{% blocktrans with profile_username=wall_profile.profile.username %}Dernières publications sur le mur de {{ profile_username }}{% endblocktrans %}{% endif %}
       </h3>
     </div>
 
@@ -38,7 +39,7 @@
   {% else %}
   <div class="col-xs-12">
     <h3>
-      {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}Aucune publication sur votre mur{% else %}Aucune publication sur le mur de {{ wall_profile.profile.username }}{% endif %}
+      {# Si l'utilisateur connecté est sur son mur #}{% if wall_profile.profile = user %}{% trans "Aucune publication sur votre mur" %}{% else %}{% blocktrans with profile_username=wall_profile.profile.username %}Aucune publication sur le mur de {{ profile_username }}{% endblocktrans %}{% endif %}
     </h3>
   </div>
   {% endif %}
@@ -48,7 +49,7 @@
 {% block page_javascript %}
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#post-form-content-input').attr("placeholder", {% if wall_profile.profile = user %}"Exprimez-vous, {{ user.username }}"{% else %}"Écrivez quelque chose à {{ wall_profile.profile.username }}..."{% endif %});
+      $('#post-form-content-input').attr('placeholder', {% if wall_profile.profile = user %}'{% trans "Exprimez-vous" %}, {{ user.username }}{% trans " " %}'{% else %}'{% trans "Écrivez quelque chose à" %} {{ wall_profile.profile.username }}...'{% endif %});
     })
   </script>
 {% endblock page_javascript %}

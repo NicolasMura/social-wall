@@ -1,9 +1,10 @@
 {% extends 'social/base.html' %}
+{% load i18n %}
 
 {% block title %}Connexion{% endblock %}
 
 
-{% block h1 %}Connexion{% endblock h1 %}
+{% block h1 %}{% trans "Connexion" %}{% endblock h1 %}
 
 
 {% block content %}
@@ -15,19 +16,19 @@
         {{ form.as_p }}
         <div class="input-group">
           <p>
-            <button type="submit" class="btn btn-primary">Se connecter</button>
+            <button type="submit" class="btn btn-primary">{% trans "Se connecter" %}</button>
           </p>
           <!-- <input type="hidden" name="next" value="{# {% url 'social:wall-profile-view' user.username %} #}" /> -->
         </div>
       </form>
     </div>
     <div class="col-xs-12">
-      <p>Pas encore de compte ? <a href="{% url 'social:user-profile-signup-view' %}">Inscrivez-vous</a>, c'est gratuit :)</p>
+      <p>{% trans "Pas encore de compte ?" %} <a href="{% url 'social:user-profile-signup-view' %}">{% trans "Inscrivez-vous</a>, c'est gratuit :)" %}</p>
     </div>
   </div>
   {% else %}
-    <p>Vous êtes déjà connecté en tant que <a href="{% url 'social:wall-profile-view' user.username %}">{{ user.username }}</a>.</p>
-    <a href="{% url 'social:generic-logout' %}">Déconnexion</a>
+    <p>{% trans "Vous êtes déjà connecté en tant que" %} <a href="{% url 'social:wall-profile-view' user.username %}">{{ user.username }}</a>.</p>
+    <a href="{% url 'social:generic-logout' %}">{% trans "Déconnexion" %}</a>
   {% endif %}
 {% endblock content %}
 

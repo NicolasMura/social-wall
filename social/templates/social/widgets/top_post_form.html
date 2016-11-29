@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <div class="col-xs-12">
   <div class="row">
@@ -31,11 +32,9 @@
             <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
             <input type="hidden" class="form-control" id="wall" name="wall" value="{% if wall.profile %}{{ wall.profile.id }}{% else %}{{ user.id }}{% endif %}">
           {% else %}
-            <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer">
+            <input type="text" class="form-control" placeholder="{% trans 'Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer' %}">
           {% endif %}
-          <!-- <span class="input-group-btn hidden"> -->
-            <button type="submit" class="btn btn-primary" id="submit-user-post" name="submit-user-post">Publier</button>
-          <!-- </span> -->
+          <button type="submit" class="btn btn-primary" id="submit-user-post" name="submit-user-post">{% trans "Publier" %}</button>
         </fieldset>
       </form>
     </div>

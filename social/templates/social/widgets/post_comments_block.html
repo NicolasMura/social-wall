@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-xs-12 comments-block">
       <div class="row">
-        <p>
+        <span class="pull-right">
           <!-- <i class="fa fa-comment" aria-hidden="true"></i> {{ post_object.post.comment_set.count }} commentaire{% if post_object.post.comment_set.count > 1 %}s{% endif %} -->
           <!-- <i class="fa fa-comment" aria-hidden="true"></i> {{ post_object.post.comment_set.count }} {% trans commentaire %} -->
           <i class="fa fa-comment" aria-hidden="true"></i>
@@ -15,7 +15,7 @@
                 {{ nb_comments }} {% blocktrans count nb=nb_comments %}commentaire{% plural %}commentaires{% endblocktrans %}
               {% endif %}
             {% endwith %}
-        </p>
+        </span>
 
         {% for comment in post_object.post.comment_set.all %}
           <!-- COMMENT BLOCK -->

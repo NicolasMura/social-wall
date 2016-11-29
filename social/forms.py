@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Profile, Post, Comment
@@ -16,7 +17,7 @@ class ProfileCreationForm(UserCreationForm):
     def save(self):
         user = super(ProfileCreationForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
-        user.set_password(self.cleaned_data["password1"])
+        user.set_password(self.cleaned_data['password1'])
         user.avatar = self.cleaned_data['avatar']
 
         user = Profile.objects.create_user(
@@ -56,6 +57,6 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Ajoutez un commentaire',
+                'placeholder': _('Ajoutez un commentaire'),
             }),
         }

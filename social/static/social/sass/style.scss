@@ -20,6 +20,10 @@ body{
     border: none;
     padding: 0px 20px;
 
+    .open > a{
+        background-color: $main-blue-color!important;
+    }
+
     select{
         background-color: #3B5999;
         color: #90949c;
@@ -48,10 +52,6 @@ h1{
     .h3{
         padding: 0px;
         margin-top: 0px;
-
-        h3{
-            margin: 0px;
-        }
     }
 
     button#submit-user-post{
@@ -102,15 +102,20 @@ h1{
         .comments-block{
             border: 1px solid $comments-block-border;
             background-color: $comments-block-light-grey-background;
-            padding: 10px 15px 15px 15px;
+            padding: 10px 15px 13px 15px;
         }
 
         fieldset .input-group{
             width:100%;
+        }
 
-            p{
-                font-size: 10px;
-                margin-bottom: 0px;
+        span{
+            font-size: 10px;
+            margin-bottom: 0px;
+
+            &.pull-right{
+                margin-right: 15px;
+                margin-bottom: 5px;
             }
         }
     }

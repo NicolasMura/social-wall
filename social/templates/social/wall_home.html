@@ -1,5 +1,6 @@
 {% extends 'social/wall_base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Social wall{% endblock %}
 
@@ -15,7 +16,7 @@
   {% if wall_home.post_objects_list|length > 0 %}
     <div class="col-xs-12 h3">
       <h3>
-        Dernières publications sur OpenFaceRoom
+        {% trans "Dernières publications sur OpenFaceRooms" %}
 
       </h3>
     </div>
@@ -39,7 +40,7 @@
   {% else %}
   <div class="col-xs-12">
     <h3>
-      Aucune publication sur OpenFaceRoom
+      {% trans "Aucune publication sur OpenFaceRoom" %}
 
     </h3>
   </div>
@@ -50,7 +51,7 @@
 {% block page_javascript %}
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#post-form-content-input').attr("placeholder", "Exprimez-vous, {{ user.username }}");
+      $('#post-form-content-input').attr('placeholder', '{% trans "Exprimez-vous" %}, {{ user.username }}{% trans " " %}');
 
     })
   </script>

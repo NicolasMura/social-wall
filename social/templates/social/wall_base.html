@@ -1,18 +1,19 @@
 {% extends 'social/base.html' %}
 {% load static %}
+{% load i18n %}
 
 <div class="row">
   <div class="col-xs-12">
     {% block h1 %}
       {# Si on est sur le wall_home) #}
       {% if wall_home %}
-        Bienvenue sur le mur d'OpenFaceRooms
+        {% trans "Bienvenue sur le mur d'OpenFaceRooms" %}
       {% else %}
         {# Si wall_profile = user #}
         {% if wall_profile.profile = user %}
-          Bienvenue sur votre mur, {{ user.username }}
+          {% trans "Bienvenue sur votre mur," %} {{ user.username }}
         {% else %}
-          Vous êtes sur le mur de {{ wall_profile.profile.username }}
+          {% blocktrans with profile_username=wall_profile.profile.username %}Vous êtes sur le mur de {{ profile_username }}{% endblocktrans %}
         {% endif %}
       {% endif %}
     {% endblock h1 %}
@@ -26,18 +27,18 @@
       {% if user.is_authenticated %}
         {# Si on est sur le wall_home) #}
         {% if wall_home and wall_home.post_objects_list|length = 0 %}
-          <p>Le mur d'OpenFaceRoom est vide : soyez le premier à réagir !</p>
+          <p>{% trans "Le mur d'OpenFaceRoom est vide : soyez le premier à réagir !" %}</p>
         {% endif %}
         {# Si l'utilisateur connecté est sur son mur #}
         {% if wall_profile and wall_profile.profile = user and wall_profile.post_objects_list|length = 0 %}
-            <p>Votre mur est vide : postez votre première publication !</p>
+            <p>{% trans "Votre mur est vide : postez votre première publication !" %}</p>
         {% endif %}
         {# Si l'utilisateur connecté est sur le mur d'un autre utilisateur #}
         {% if wall_profile and wall_profile.profile != user and wall_profile.post_objects_list|length = 0 %}  
-            <p>Le mur de {{ wall_profile.profile.username }} est vide : écrivez-lui !</p>
+            <p>{% blocktrans with profile_username=wall_profile.profile.username %}Le mur de {{ profile_username }} est vide : écrivez-lui !{% endblocktrans %}</p>
         {% endif %}
       {% else %}
-        <p>Vous devez <a href="{% url 'social:user-profile-signup-view' %}">vous inscrire</a> ou vous <a href="{% url 'social:generic-login-view' %}">vous connecter</a> pour pouvoir vous exprimer.</p>
+        <p>{% trans "Vous devez" %} <a href="{% url 'social:user-profile-signup-view' %}">{% trans "vous inscrire</a> ou vous" %} <a href="{% url 'social:generic-login-view' %}">{% trans "vous connecter</a> pour pouvoir vous exprimer." %}</p>
       {% endif %}
 
       {% block wall_top_block %}{% endblock wall_top_block %}

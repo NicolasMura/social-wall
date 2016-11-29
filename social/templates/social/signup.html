@@ -1,9 +1,10 @@
 {% extends 'social/base.html' %}
+{% load i18n %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}{% trans "Inscription" %}{% endblock %}
 
 
-{% block h1 %}Inscription{% endblock h1 %}
+{% block h1 %}{% trans "Inscription" %}{% endblock h1 %}
 
 
 {% block content %}
@@ -13,7 +14,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <p>
-          <button type="submit" class="btn btn-primary">Je m'inscris !</button>
+          <button type="submit" class="btn btn-primary">{% trans "Je m'inscris !" %}</button>
         </p>
       </form>
     </div>

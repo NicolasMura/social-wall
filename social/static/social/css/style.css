@@ -8,6 +8,8 @@ body {
   background-color: #3B5999;
   border: none;
   padding: 0px 20px; }
+  .navbar-inverse .open > a {
+    background-color: #3B5999 !important; }
   .navbar-inverse select {
     background-color: #3B5999;
     color: #90949c;
@@ -27,8 +29,6 @@ h1 {
 .top-block .h3 {
   padding: 0px;
   margin-top: 0px; }
-  .top-block .h3 h3 {
-    margin: 0px; }
 .top-block button#submit-user-post {
   float: right;
   margin-top: 5px; }
@@ -60,12 +60,15 @@ h1 {
     .post-block-container .comments-block-container .comments-block {
       border: 1px solid #ccc;
       background-color: #F6F7F9;
-      padding: 10px 15px 15px 15px; }
+      padding: 10px 15px 13px 15px; }
     .post-block-container .comments-block-container fieldset .input-group {
       width: 100%; }
-      .post-block-container .comments-block-container fieldset .input-group p {
-        font-size: 10px;
-        margin-bottom: 0px; }
+    .post-block-container .comments-block-container span {
+      font-size: 10px;
+      margin-bottom: 0px; }
+      .post-block-container .comments-block-container span.pull-right {
+        margin-right: 15px;
+        margin-bottom: 5px; }
   .post-block-container .subscribed-from {
     padding-top: 15px; }
 

@@ -119,7 +119,7 @@ class LoginView(SuccessMessageMixin, FormView):
     success_url = reverse_lazy(
         'social:wall-view',
     )
-    success_message = 'Heureux de vous revoir, %(username)s!'
+    success_message = _('Heureux de vous revoir, %(username)s !')
 
     def form_valid(self, form):
         user = form.get_user()
