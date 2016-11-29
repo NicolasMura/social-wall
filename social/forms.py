@@ -65,6 +65,15 @@ class ProfileChangeForm(UserChangeForm):
 
     #     return user
 
+    # Needs to overwrite clean method to check if email already exists
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if Profile.objects.exclude(pk=self.instance.pk).filter(
+                email=email).exists():
+            raise forms.ValidationError(_(
+                'A user with that email already exists.'))
+        return email
+
 
 class PostForm(forms.ModelForm):
     class Meta:
