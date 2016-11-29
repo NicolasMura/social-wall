@@ -11,7 +11,8 @@ body {
   .navbar-inverse select {
     background-color: #3B5999;
     color: #90949c;
-    border: none; }
+    border: none;
+    cursor: pointer; }
     .navbar-inverse select:hover {
       color: #fff; }
 
