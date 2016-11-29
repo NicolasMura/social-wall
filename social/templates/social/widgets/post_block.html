@@ -26,7 +26,7 @@
           <b><a class="username" href="{% url 'social:wall-profile-view' post_object.post.author %}">{{ post_object.post.author }}</a></b> <i class="fa fa-arrow-right" aria-hidden="true"></i> <b>{{ post_object.post.wall }}</b>
         {% endif %}
       {% endif %}
-      <p><i class="date">{{ post_object.post.submit_date|danatime }}</i></p>
+      <p><i class="date">{{ post_object.post.submit_date|danatime|capfirst }}</i></p>
     </div>
   </div>
 </div>

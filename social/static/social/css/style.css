@@ -60,6 +60,11 @@ h1 {
       border: 1px solid #ccc;
       background-color: #F6F7F9;
       padding: 10px 15px 15px 15px; }
+    .post-block-container .comments-block-container fieldset .input-group {
+      width: 100%; }
+      .post-block-container .comments-block-container fieldset .input-group p {
+        font-size: 10px;
+        margin-bottom: 0px; }
   .post-block-container .subscribed-from {
     padding-top: 15px; }
 
@@ -69,7 +74,6 @@ h1 {
   margin-top: 20px; }
 
 ul.messages {
-  margin: 0px;
   padding: 0px; }
   ul.messages li.success {
     background-color: #19B698;

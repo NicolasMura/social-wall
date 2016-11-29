@@ -17,8 +17,9 @@
         {% else %}
           <input type="text" class="form-control" placeholder="Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire">
         {% endif %}
+        {% if user.is_authenticated %}<p>Appuyez sur Entrée pour publier.</p>{% endif %}
         <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">Envoyer</button>
+        <button type="submit" class="btn btn-primary hidden" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">Envoyer</button>
         </span>
       </div>
     </fieldset>

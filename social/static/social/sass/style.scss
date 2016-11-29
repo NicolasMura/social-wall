@@ -103,6 +103,15 @@ h1{
             background-color: $comments-block-light-grey-background;
             padding: 10px 15px 15px 15px;
         }
+
+        fieldset .input-group{
+            width:100%;
+
+            p{
+                font-size: 10px;
+                margin-bottom: 0px;
+            }
+        }
     }
 
     .subscribed-from{
@@ -117,7 +126,6 @@ h1{
 }
 
 ul.messages{
-    margin: 0px;
     padding: 0px;
 
     li.success{
