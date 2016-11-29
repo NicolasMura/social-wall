@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.2']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,6 +50,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    # To get informed of generated 404 pages
+    'django.middleware.common.BrokenLinkEmailsMiddleware'
 )
 
 ROOT_URLCONF = 'social_network.urls'
