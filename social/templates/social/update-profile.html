@@ -26,6 +26,7 @@
       <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-update-view' user.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
+        {# {{ form.username }} #}
         <p>
           <button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
         </p>

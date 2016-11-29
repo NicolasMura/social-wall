@@ -8,6 +8,7 @@ from django.contrib.auth.models import AbstractUser
 # from django.contrib.sites.models import Site  # utile ?
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
 from django.core.exceptions import ValidationError
+# from django.core.urlresolvers import reverse_lazy
 
 COMMENT_MAX_LENGTH = 1000
 VALID_IMG_EXTENSIONS = [
@@ -27,7 +28,7 @@ def validate_image(
         max_height=MAX_HEIGHT,
         max_size=MEGABYTE_LIMIT*1024*1024,
         valid_extensions=VALID_IMG_EXTENSIONS):
-    if fieldfile_obj.name != "default/avatars/default-avatar.png":
+    if hasattr(fieldfile_obj, 'image'):
         if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
             raise ValidationError(
                 "Erreur : le format de l'image est incorrect ! "

@@ -173,17 +173,17 @@ class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
     """
 
     # model = Profile  # Needs to declare model (or queryset or queryset)
+    # fields = ['email', 'username', 'avatar']
     form_class = ProfileChangeForm
     template_name = 'social/update-profile.html'
-    # Redirection to user's profile doesn't work - To correct :
-    # success_url = reverse_lazy(
-    #     'social:user-profile-update-view',
-    #     kwargs={'pk': '%(pk)s'},
-    # )
-    success_url = reverse_lazy(
-        'social:user-profile-update-view',
-    )
 
+    # UserProfileUpdateView needs a QuerySet
     def get_object(self, queryset=None):
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         return profile
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy(
+            'social:user-profile-update-view',
+            kwargs={'pk': self.kwargs['pk']}
+        )

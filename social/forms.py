@@ -43,7 +43,27 @@ class ProfileCreationForm(UserCreationForm):
 class ProfileChangeForm(UserChangeForm):
     class Meta:
         model = Profile
-        fields = ['email', 'username', 'avatar']
+        fields = ['email', 'username', 'avatar', 'password']
+
+    # Override __init__ method to get user's pk (sse views.py)
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('pk', None)
+        super(ProfileChangeForm, self).__init__(*args, **kwargs)
+
+    # Needs to overwrite save method to save avatar.
+    # def save(self):
+    #     user = super(ProfileChangeForm, self).save(commit=False)
+    #     user.email = self.cleaned_data['email']
+    #     user.avatar = self.cleaned_data['avatar']
+
+    #     user = Profile.objects.create_user(
+    #         self.cleaned_data['username'],
+    #         self.cleaned_data['email'],
+    #     )
+    #     user.avatar = self.cleaned_data['avatar']
+    #     user.save()
+
+    #     return user
 
 
 class PostForm(forms.ModelForm):
