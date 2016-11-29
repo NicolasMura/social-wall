@@ -35,8 +35,8 @@ class ProfileCreationForm(UserCreationForm):
         email = self.cleaned_data['email']
         if Profile.objects.exclude(pk=self.instance.pk).filter(
                 email=email).exists():
-            raise forms.ValidationError(
-                u'A user with that email already exists.')
+            raise forms.ValidationError(_(
+                'A user with that email already exists.'))
         return email
 
 
