@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 11:59+0100\n"
+"POT-Creation-Date: 2016-12-01 14:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,61 +24,65 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: social/forms.py:60
+#: social/forms.py:39 social/forms.py:77
+msgid "Un utilisateur avec cette adresse électronique existe déjà."
+msgstr "A user with that email address already exists."
+
+#: social/forms.py:101
 msgid "Ajoutez un commentaire"
 msgstr "Write a comment"
 
-#: social/models.py:40
+#: social/models.py:41
+#, fuzzy
+#| msgid ""
+#| "Erreur : les dimensions de l'image excèdent le maximum autorisé ({} x {} "
+#| "px max)."
 msgid ""
-"Erreur : les dimensions de l'image excèdent le maximum autorisé ({} x {} px "
+"Erreur : les dimensions de l'image excèdent le maximum autorisé ({} x {} "
 "max)."
 msgstr ""
 "Error : image dimensions exceeding maximum authorized ({} x {} px max)."
 
-#: social/models.py:52
+#: social/models.py:53
 msgid "Profil utilisateur"
 msgstr ""
 
-#: social/models.py:53
+#: social/models.py:54
 msgid "Profils utilisateurs"
 msgstr ""
 
-#: social/models.py:56
+#: social/models.py:57
 msgid "Votre avatar"
 msgstr "Your avatar"
 
-#: social/models.py:80
+#: social/models.py:81
 msgid "Auteur"
 msgstr ""
 
-#: social/models.py:88
-msgid "Commentaire"
-msgstr ""
-
-#: social/models.py:96
+#: social/models.py:90
 msgid "Date de publication"
 msgstr ""
 
-#: social/models.py:101
+#: social/models.py:95
 msgid "publique ?"
 msgstr "Public ?"
 
-#: social/models.py:104
+#: social/models.py:98
 msgid ""
 "Uncheck this box to make the comment effectively disappear from the site."
 msgstr ""
 
-#: social/models.py:109
+#: social/models.py:103
 msgid "Désactivé ?"
 msgstr "Deactivated ?"
 
-#: social/models.py:112
+#: social/models.py:106
 msgid ""
 "Check this box if the comment is inappropriate. A \"This comment has been "
 "removed\" message will be displayed instead."
 msgstr ""
 
-#: social/models.py:132
+#: social/models.py:126
 #, python-format
 msgid ""
 "Posted by %(profile)s at %(date)s\n"
@@ -88,16 +92,20 @@ msgid ""
 "http://%(domain)s"
 msgstr ""
 
-#: social/models.py:139
+#: social/models.py:133
 msgid "Post"
 msgstr ""
 
-#: social/models.py:140
+#: social/models.py:134
 msgid "Posts"
 msgstr ""
 
-#: social/models.py:144
+#: social/models.py:138
 msgid "Publié sur le mur de"
+msgstr ""
+
+#: social/models.py:145
+msgid "Message"
 msgstr ""
 
 #: social/models.py:152
@@ -105,69 +113,81 @@ msgstr ""
 msgid "Post de %(author)s : %(content)s..."
 msgstr ""
 
-#: social/models.py:172
-msgid "Commentaire de %()s : %s..."
+#: social/models.py:171
+msgid "Commentaire"
 msgstr ""
 
-#: social/templates/social/base.html:71
+#: social/models.py:178
+#, python-format
+msgid "Commentaire de %(author)s : %(content)s..."
+msgstr ""
+
+#: social/templates/social/base.html:72
 msgid "Fil d'actualités"
 msgstr "Home"
 
-#: social/templates/social/base.html:72
+#: social/templates/social/base.html:73
 msgid "Mon mur"
 msgstr "My wall"
 
-#: social/templates/social/base.html:73
+#: social/templates/social/base.html:74
 msgid "Mon profil"
 msgstr "My profile"
 
-#: social/templates/social/base.html:74 social/templates/social/login.html:31
+#: social/templates/social/base.html:75 social/templates/social/login.html:32
+#: social/templates/social/signup.html:26
 msgid "Déconnexion"
 msgstr "Logout"
 
-#: social/templates/social/base.html:78 social/templates/social/signup.html:4
-#: social/templates/social/signup.html:7
+#: social/templates/social/base.html:79 social/templates/social/signup.html:5
+#: social/templates/social/signup.html:8
 msgid "Inscription"
 msgstr "Signup"
 
-#: social/templates/social/base.html:79 social/templates/social/login.html:7
+#: social/templates/social/base.html:80 social/templates/social/login.html:8
 msgid "Connexion"
 msgstr "Login"
 
-#: social/templates/social/base.html:111
+#: social/templates/social/base.html:104
 msgid "Mon super réseau social - Powered by Django"
 msgstr "My super social network - Powered by Django"
 
-#: social/templates/social/login.html:19
+#: social/templates/social/login.html:20
 msgid "Se connecter"
 msgstr "Login"
 
-#: social/templates/social/login.html:26
+#: social/templates/social/login.html:27
 msgid "Pas encore de compte ?"
 msgstr "Not subscribed yet ?"
 
-#: social/templates/social/login.html:26
+#: social/templates/social/login.html:27
 msgid "Inscrivez-vous</a>, c'est gratuit :)"
 msgstr "Signup</a>, it's free :)"
 
-#: social/templates/social/login.html:30
+#: social/templates/social/login.html:31
 msgid "Vous êtes déjà connecté en tant que"
 msgstr "You are already logged as"
 
-#: social/templates/social/signup.html:17
+#: social/templates/social/signup.html:19
 msgid "Je m'inscris !"
 msgstr "Go !"
 
-#: social/templates/social/update-profile.html:4
-#: social/templates/social/update-profile.html:7
+#: social/templates/social/signup.html:25
+#, fuzzy
+#| msgid "Vous êtes déjà connecté en tant que"
+msgid "Vous êtes déjà inscrit en tant que"
+msgstr "You are already logged as"
+
+#: social/templates/social/update-profile.html:5
+#: social/templates/social/update-profile.html:8
 msgid "Mettre à jour votre profil"
 msgstr "Update your profile"
 
-#: social/templates/social/update-profile.html:23
+#: social/templates/social/update-profile.html:24
 msgid "Vos informations"
 msgstr "General account settings"
 
-#: social/templates/social/update-profile.html:30
+#: social/templates/social/update-profile.html:32
 msgid "Valider"
 msgstr "Save"
 
@@ -209,23 +229,25 @@ msgstr "subscribe</a> or"
 msgid "vous connecter</a> pour pouvoir vous exprimer."
 msgstr "login</a> to publish something."
 
-#: social/templates/social/wall_home.html:19
-msgid "Dernières publications sur OpenFaceRooms"
-msgstr "Last published posts on OpenFaceRooms"
-
-#: social/templates/social/wall_home.html:43
-msgid "Aucune publication sur OpenFaceRoom"
-msgstr "Last published posts on OpenFaceRooms"
-
-#: social/templates/social/wall_home.html:54
+#: social/templates/social/wall_base.html:54
+#: social/templates/social/wall_home.html:56
 #: social/templates/social/wall_profile.html:52
 msgid "Exprimez-vous"
 msgstr "What is on your mind"
 
-#: social/templates/social/wall_home.html:54
+#: social/templates/social/wall_base.html:54
+#: social/templates/social/wall_home.html:56
 #: social/templates/social/wall_profile.html:52
 msgid " "
 msgstr " ?"
+
+#: social/templates/social/wall_home.html:19
+msgid "Dernières publications sur OpenFaceRooms"
+msgstr "Last published posts on OpenFaceRooms"
+
+#: social/templates/social/wall_home.html:44
+msgid "Aucune publication sur OpenFaceRoom"
+msgstr "Last published posts on OpenFaceRooms"
 
 #: social/templates/social/wall_profile.html:5
 #, python-format
@@ -255,17 +277,17 @@ msgstr "There's nothing published yet on %(profile_username)s's wall"
 msgid "Écrivez quelque chose à"
 msgstr "Write something to"
 
-#: social/templates/social/widgets/comment_form.html:20
+#: social/templates/social/widgets/comment_form.html:16
 msgid ""
 "Vous devez vous inscrire ou vous connecter pour pouvoir publier un "
 "commentaire"
 msgstr "You must signup or login to comment"
 
-#: social/templates/social/widgets/comment_form.html:23
+#: social/templates/social/widgets/comment_form.html:19
 msgid "Envoyer"
 msgstr "Send"
 
-#: social/templates/social/widgets/comment_form.html:26
+#: social/templates/social/widgets/comment_form.html:22
 msgid "Appuyez sur Entrée pour publier."
 msgstr "Press Enter to post."
 
@@ -279,11 +301,11 @@ msgid_plural "commentaires"
 msgstr[0] "comment"
 msgstr[1] "comments"
 
-#: social/templates/social/widgets/top_post_form.html:35
+#: social/templates/social/widgets/top_post_form.html:31
 msgid "Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer"
 msgstr "You must signup or login to publish something"
 
-#: social/templates/social/widgets/top_post_form.html:37
+#: social/templates/social/widgets/top_post_form.html:33
 msgid "Publier"
 msgstr "Post"
 
@@ -317,11 +339,13 @@ msgstr[1] ""
 msgid "%s yesterday"
 msgstr ""
 
-#: social/views.py:122
+#: social/views.py:116
+#, python-format
 msgid "Heureux de vous revoir, %(username)s !"
 msgstr "Welcome back, %(username)s!"
 
-#: social/views.py:154
+#: social/views.py:169
+#, python-format
 msgid "Vous êtes désormais inscrit(e) sur OpenFaceRoom, %(username)s !"
 msgstr "Welcome on OpenFaceRoom, %(username)s !"
 
@@ -333,11 +357,11 @@ msgstr "Your post has been published !"
 msgid "Votre commentaire a été publié !"
 msgstr "Your comment has been published !"
 
-#: social_network/settings.py:102
+#: social_network/settings.py:105
 msgid "Français"
 msgstr "French"
 
-#: social_network/settings.py:103
+#: social_network/settings.py:106
 msgid "Anglais"
 msgstr "English"
 

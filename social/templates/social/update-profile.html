@@ -1,5 +1,6 @@
 {% extends 'social/base.html' %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% block title %}{% trans "Mettre à jour votre profil" %}{% endblock %}
 
@@ -25,22 +26,9 @@
     <div class="col-xs-12 block-infos">
       <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-update-view' user.pk %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        {# {{ form.username }} #}
-        <p>
-          <button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
-        </p>
+        {% bootstrap_form form exclude='password' %}
+        <button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
       </form>
     </div>
   </div>
 {% endblock content %}
-
-
-{% block page_javascript %}
-  <script type="text/javascript">
-    $(document).ready(function(){
-        $('input[type!=file]').addClass("form-control");
-      $('.errorList li').addClass("alert alert-danger");  // Marche pas
-    })
-  </script>
-{% endblock page_javascript %}

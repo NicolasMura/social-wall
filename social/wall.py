@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext as _
-from .models import Post
-from .forms import PostForm, CommentForm
 from django.contrib import messages
 from django.db.models import Q
 import operator
 from functools import reduce
+
+from .models import Post
+from .forms import PostForm, CommentForm
 
 
 def get_wall_home():

@@ -1,5 +1,6 @@
 {% extends 'social/base.html' %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% block title %}Connexion{% endblock %}
 
@@ -8,24 +9,14 @@
 
 
 {% block content %}
-  {% if request.GET.next %}
-  <div class="col-xs-12 alert alert-danger">
-    <ul class="errorlist">
-      <li >Vous devez vous connecter pour accéder à cette page.</li>
-    </ul>
-  </div>
-  {% endif %}
-
   {% if not user.is_authenticated %}
   <div class="row">
     <div class="col-xs-12">
       <form method="post" action="{% url 'social:generic-login-view' %}">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% bootstrap_form form %}
         <div class="input-group">
-          <p>
-            <button type="submit" class="btn btn-primary">{% trans "Se connecter" %}</button>
-          </p>
+          <button type="submit" class="btn btn-primary">{% trans "Se connecter" %}</button>
           <input type="hidden" name="next" value="{{ request.GET.next }}" />
         </div>
       </form>
@@ -39,13 +30,3 @@
     <a href="{% url 'social:generic-logout' %}">{% trans "Déconnexion" %}</a>
   {% endif %}
 {% endblock content %}
-
-
-{% block page_javascript %}
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $('input').addClass("form-control");
-      $('.errorList li').addClass("alert alert-danger");  // Marche pas
-    })
-  </script>
-{% endblock page_javascript %}

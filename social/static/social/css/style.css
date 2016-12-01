@@ -75,19 +75,4 @@ h1 {
   background-color: #3B5999 !important;
   margin-top: 20px; }
 
-ul.messages {
-  padding: 0px; }
-  ul.messages li.success {
-    background-color: #19B698;
-    border: 1px solid transparent;
-    border-color: #0fac8e;
-    color: white;
-    padding: 15px;
-    list-style-type: none; }
-
-ul.errorlist {
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px; }
-
 /*# sourceMappingURL=style.css.map */

@@ -1,18 +1,14 @@
 {% load i18n %}
+{% load bootstrap3 %}
 
 <div class="col-xs-12">
   <!-- <a href="#comments-{{ post_object.post.pk }}" id="comments-{{ post_object.post.pk }}">hyperlink to comment #{{ post_object.post.pk }}</a> -->
   <form action="" method="POST" role="form">
-    {% if post_object.author_comment_form.errors.content %}
-    <div class="alert alert-danger">
-      <strong>{{ post_object.author_comment_form.errors.content|escape }}</strong>
-    </div>
-    {% endif %}
     {% csrf_token %}
     <fieldset {% if not user.is_authenticated %}disabled{% endif %}>
       <div class="input-group">
         {% if user.is_authenticated %}
-          {{ post_object.author_comment_form.content }}
+          {% bootstrap_field post_object.author_comment_form.content show_label=False %}
           {# {{ post_object.author_comment_form.content|safe }} #}
           <input type="hidden" class="form-control" id="author" name="author" value="{{ user.id }}">
           <input type="hidden" class="form-control" id="related_post" name="related_post" value="{{ post_object.post.pk }}">
@@ -20,7 +16,7 @@
           <input type="text" class="form-control" placeholder="{% trans 'Vous devez vous inscrire ou vous connecter pour pouvoir publier un commentaire' %}">
         {% endif %}
         <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">{% trans "Envoyer" %}</button>
+          <button type="submit" class="btn btn-primary" id="submit-user-comment-{{ post_object.post.pk }}" name="submit-user-comment-{{ post_object.post.pk }}">{% trans "Envoyer" %}</button>
         </span>
       </div>
         {% if user.is_authenticated %}<span>{% trans "Appuyez sur Entrée pour publier." %}</span>{% endif %}

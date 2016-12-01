@@ -1,5 +1,6 @@
 {% extends 'social/base.html' %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% block title %}{% trans "Inscription" %}{% endblock %}
 
@@ -8,25 +9,18 @@
 
 
 {% block content %}
-  <div class="row">
-    <div class="col-xs-12">
-      <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-signup-view' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p>
+  {% if not user.is_authenticated %}
+    <div class="row">
+      <div class="col-xs-12">
+        <form method="post" enctype="multipart/form-data" action="{% url 'social:user-profile-signup-view' %}">
+          {% csrf_token %}
+          {% bootstrap_form form %}
           <button type="submit" class="btn btn-primary">{% trans "Je m'inscris !" %}</button>
-        </p>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
+  {% else %}
+    <p>{% trans "Vous êtes déjà inscrit en tant que" %} <a href="{% url 'social:user-profile-update-view' user.pk %}">{{ user.username }}</a>.</p>
+    <a href="{% url 'social:generic-logout' %}">{% trans "Déconnexion" %}</a>
+  {% endif %}  
 {% endblock content %}
-
-
-{% block page_javascript %}
-  <script type="text/javascript">
-    $(document).ready(function(){
-        $('input[type!=file]').addClass("form-control");
-      $('.errorList li').addClass("alert alert-danger");  // Marche pas
-    })
-  </script>
-{% endblock page_javascript %}

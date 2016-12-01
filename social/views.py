@@ -2,18 +2,18 @@
 from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import View, CreateView, UpdateView, FormView
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
-from .models import Profile
-from .forms import ProfileCreationForm, ProfileChangeForm
 from django.contrib.auth.forms import AuthenticationForm
-# from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 import re
 
 from .wall import get_wall_home, get_wall_profile
+from .models import Profile
+from .forms import ProfileCreationForm, ProfileChangeForm
 
 
 class AppView(View):
@@ -120,14 +120,30 @@ class LoginView(SuccessMessageMixin, FormView):
         return super(LoginView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
-        asked_page = self.request.POST['next']
-        if asked_page != '':
-            return asked_page
+        next_page = self.request.POST['next']
+        if next_page != '':
+            return next_page
         else:
             return reverse_lazy(
                 'social:wall-profile-view',
                 kwargs={'username': self.request.user.username}
             )
+
+    def get(self, request):
+        next_page = request.GET.get('next')
+        if next_page:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Vous devez vous connecter pour accéder à cette page.'
+            )
+        if request.user.is_authenticated():
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                'Vous êtes déjà connecté !'
+            )
+        return super(LoginView, self).get(request)
 
 
 class UserProfileCreateView(SuccessMessageMixin, CreateView):
@@ -165,13 +181,19 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
         return valid
 
     # def get_success_url(self, **kwargs):
-    #     print("*****", self.request.user.username, "*****")
-    #     print("*****", self.kwargs, "*****")
-    #     print("*****", kwargs, "*****")
     #     return reverse_lazy(
     #         'social:wall-profile-view',
     #         kwargs={'username': self.request.user.username}
     #     )
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                'Vous êtes déjà inscrit !'
+            )
+        return super(UserProfileCreateView, self).get(request)
 
 
 class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
@@ -190,6 +212,11 @@ class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
         return profile
 
     def get_success_url(self, **kwargs):
+        messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                'Vos informations ont bien été mises à jour.'
+            )
         return reverse_lazy(
             'social:user-profile-update-view',
             kwargs={'pk': self.kwargs['pk']}

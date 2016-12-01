@@ -16,7 +16,6 @@ import os
 import socket
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 
@@ -37,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    # 'bootstrap3',
+    'bootstrap3',
     'social',
 )
 

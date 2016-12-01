@@ -5,9 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 # from django.contrib.sites.models import Site  # utile ?
 # from django.utils.encoding import python_2_unicode_compatible  # utile ?
-from django.core.exceptions import ValidationError
+
 
 COMMENT_MAX_LENGTH = 1000
 VALID_IMG_EXTENSIONS = [
@@ -17,8 +18,8 @@ VALID_IMG_EXTENSIONS = [
         ".gif", ".GIF",
     ]
 MEGABYTE_LIMIT = 2
-MAX_WIDTH = 1920
-MAX_HEIGHT = 1080
+MAX_WIDTH = 6000
+MAX_HEIGHT = 6000
 
 
 def validate_image(
@@ -27,18 +28,19 @@ def validate_image(
         max_height=MAX_HEIGHT,
         max_size=MEGABYTE_LIMIT*1024*1024,
         valid_extensions=VALID_IMG_EXTENSIONS):
-    if hasattr(fieldfile_obj, 'image'):
-        if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
+    # Below condition is for robustness only
+    if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
             raise ValidationError(
                 "Erreur : le format de l'image est incorrect ! "
                 "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS))
+    if hasattr(fieldfile_obj.file, 'image'):
         if (
             fieldfile_obj.file.image.width > max_width or
             fieldfile_obj.file.image.height > max_height
         ):
             raise ValidationError(_(
                 "Erreur : les dimensions de l'image excèdent le maximum "
-                "autorisé ({} x {} px max).").format(MAX_WIDTH, MAX_HEIGHT))
+                "autorisé ({} x {} max).").format(MAX_WIDTH, MAX_HEIGHT))
         img_width = fieldfile_obj.file.image.size[0]
         img_height = fieldfile_obj.file.image.size[1]
         if img_width*img_height > max_size:
@@ -84,13 +86,6 @@ class PostCommentAbstract(models.Model):
         related_name="%(class)s_author",
         # on_delete=models.SET_NULL,
     )
-    content = models.TextField(
-        verbose_name=_('Commentaire'),
-        max_length=COMMENT_MAX_LENGTH,
-        default="",
-        blank=False,
-    )
-
     # Metadata about the post/comment
     submit_date = models.DateTimeField(
         verbose_name=_('Date de publication'),
@@ -147,6 +142,12 @@ class Post(PostCommentAbstract):
         # related_name="%(class)s_comments",
         related_name="wall",
     )
+    content = models.TextField(
+        verbose_name=_('Message'),
+        max_length=COMMENT_MAX_LENGTH,
+        default="",
+        blank=False,
+    )
 
     def __unicode__(self):
         return _("Post de %(author)s : %(content)s...") % {
@@ -167,7 +168,13 @@ class Comment(PostCommentAbstract):
         # on_delete=models.SET_NULL,
         # related_name="wall",
         )
+    content = models.CharField(
+        verbose_name=_('Commentaire'),
+        max_length=COMMENT_MAX_LENGTH,
+        default="",
+        blank=False,
+    )
 
     def __unicode__(self):
-        return _("Commentaire de %()s : %s...") % {
+        return _("Commentaire de %(author)s : %(content)s...") % {
             'author': self.author, 'content': self.content[:50]}

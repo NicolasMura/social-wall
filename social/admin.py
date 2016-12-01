@@ -5,7 +5,6 @@ from django.contrib import admin
 # from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 # from django.utils.translation import ugettext_lazy as _, ungettext
-
 # from django_comments import get_model
 # from django_comments.views.moderation import (
 #     perform_flag,

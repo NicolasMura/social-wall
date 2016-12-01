@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 <!DOCTYPE html>
 <html lang="">
@@ -87,16 +88,8 @@
     
     <div class="container">
       <div class="row">
-    
-        <div class="col-xs-12">
-          {% if messages %}
-            <ul class="messages">
-              {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+      
+        {% bootstrap_messages %}
 
         <div class="col-xs-12">
           <h1>{% block h1 %}{% endblock h1 %}</h1>
