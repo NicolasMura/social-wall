@@ -22,7 +22,7 @@
 
     {% for post_object_dict in wall_profile.post_objects_list %}
       
-      <div class="clear"></div>
+      <div class="clearfix"></div>
       <div class="post-block-container">
         <!-- POST BLOCK -->
         {% include 'social/widgets/post_block.html' with wall=wall_profile post_object=post_object_dict.post_object %}

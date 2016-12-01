@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.conf.urls import patterns, url
 from django.contrib.auth import views as auth_views
 from django.conf.urls import include
@@ -17,8 +17,6 @@ urlpatterns = patterns(
         name='wall-view',
     ),
     url(
-        # TO DO sur cette vue :
-        # - rediriger vers le wall-user-view
         r'^login/$',
         LoginView.as_view(),
         name='generic-login-view',
@@ -40,15 +38,13 @@ urlpatterns = patterns(
     ),
     url(
         r'^profile/edit/(?P<pk>\d+)$',
-        UserProfileUpdateView.as_view(),
+        login_required(UserProfileUpdateView.as_view()),
         name='user-profile-update-view',
     ),
     url(
         r'^wall/(?P<username>.+)$',
         # r'^profile/(?P<username>[\w.@+-]+)/$',
-        # r'^Nikouz/$',
         WallProfileView.as_view(),
-        # login_required(WallProfileView.as_view()),
         name='wall-profile-view',
     ),
     url(

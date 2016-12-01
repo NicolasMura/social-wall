@@ -17,7 +17,7 @@
         <img src="{% static 'social/avatars/default-avatar.png' %}" width="50">
       {% endif %}
     </div>
-    <div class="col-xs-10 col-sm-11">
+    <div class="col-xs-10 col-sm-11 clearfix">
       <form action="" method="POST" role="form">
         {% if wall.author_post_form.errors.content %}
         <div class="alert alert-danger">
@@ -34,7 +34,7 @@
           {% else %}
             <input type="text" class="form-control" placeholder="{% trans 'Vous devez vous inscrire ou vous connecter pour pouvoir vous exprimer' %}">
           {% endif %}
-          <button type="submit" class="btn btn-primary" id="submit-user-post" name="submit-user-post">{% trans "Publier" %}</button>
+          <button type="submit" class="btn btn-primary pull-right" id="submit-user-post" name="submit-user-post">{% trans "Publier" %}</button>
         </fieldset>
       </form>
     </div>

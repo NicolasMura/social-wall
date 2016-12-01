@@ -2,13 +2,14 @@
 from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.generic import View, CreateView, UpdateView, FormView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from .models import Profile
 from .forms import ProfileCreationForm, ProfileChangeForm
 from django.contrib.auth.forms import AuthenticationForm
+# from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 import re
 
@@ -111,26 +112,22 @@ class WallProfileView(AppView):
 class LoginView(SuccessMessageMixin, FormView):
     form_class = AuthenticationForm
     template_name = 'social/login.html'
-    # Redirection to user's wall doesn't work - To correct :
-    # success_url = reverse_lazy(
-    #     'social:wall-profile-view',
-    #     kwargs={'profile': '%(username)s'},
-    # )
-    success_url = reverse_lazy(
-        'social:wall-view',
-    )
     success_message = _('Heureux de vous revoir, %(username)s !')
 
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-
         return super(LoginView, self).form_valid(form)
 
-    # def get_success_url(self, **kwargs):
-    #     return reverse_lazy(
-    #         'social:wall-profile-view',
-    #         kwargs={'username': kwargs['username']})
+    def get_success_url(self, **kwargs):
+        asked_page = self.request.POST['next']
+        if asked_page != '':
+            return asked_page
+        else:
+            return reverse_lazy(
+                'social:wall-profile-view',
+                kwargs={'username': self.request.user.username}
+            )
 
 
 class UserProfileCreateView(SuccessMessageMixin, CreateView):
@@ -140,6 +137,7 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
     """
 
     # model = Profile
+    # fields = ['email', 'username', 'avatar', 'password']
     form_class = ProfileCreationForm
     template_name = 'social/signup.html'
     # Redirection to user's wall doesn't work - To correct :
@@ -165,6 +163,15 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
         )
         login(self.request, new_user)
         return valid
+
+    # def get_success_url(self, **kwargs):
+    #     print("*****", self.request.user.username, "*****")
+    #     print("*****", self.kwargs, "*****")
+    #     print("*****", kwargs, "*****")
+    #     return reverse_lazy(
+    #         'social:wall-profile-view',
+    #         kwargs={'username': self.request.user.username}
+    #     )
 
 
 class UserProfileUpdateView(SuccessMessageMixin, UpdateView):

@@ -1,3 +1,4 @@
+$white: white;
 $main-blue-color: #3B5999;
 $main-blue-color-hover: #337ab7;
 $main-grey-color: #E9EBEE;
@@ -6,6 +7,9 @@ $comments-block-light-grey-background: #F6F7F9;
 $comments-block-border: #ccc;
 $success-color: #19B698;
 $success-color-border: #0fac8e;
+$border-color-fb-1:#e5e6e9 ;
+$border-color-fb-2:#dfe0e4;
+$border-color-fb-3:#d0d1d5;
 
 body{
     background-color: $main-grey-color;
@@ -25,21 +29,20 @@ body{
     }
 
     select{
-        background-color: #3B5999;
-        color: #90949c;
+        background-color: $main-blue-color;
+        color: $secondary-grey-color;
         border: none;
         cursor: pointer;
 
         &:hover{
-            color: #fff;
+            color: $white;
         }
     }
 }
 
 nav{
     .nav-avatar{
-        float:left;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 }
 
@@ -55,17 +58,16 @@ h1{
     }
 
     button#submit-user-post{
-        float: right;
         margin-top: 5px;
     }
 }
 
 .post-block-container{
-    background-color: white;
+    background-color: $white;
     padding: 10px 10px 10px 10px;
     margin: 10px 0px;
     border: 1px solid;
-    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-color: $border-color-fb-1 $border-color-fb-2 $border-color-fb-3;
     border-radius: 3px;
 
     .username{
@@ -138,7 +140,7 @@ ul.messages{
         background-color: $success-color;
         border: 1px solid transparent;
         border-color: $success-color-border;
-        color: white;
+        color: $white;
         padding: 15px;
         list-style-type: none;
     }
@@ -148,8 +150,4 @@ ul.errorlist{
     list-style-type: none;
     padding: 0px;
     margin:0px;
-}
-
-.clear{
-    clear:both;
 }

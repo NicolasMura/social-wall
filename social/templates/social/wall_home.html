@@ -18,12 +18,13 @@
       <h3>
         {% trans "Dernières publications sur OpenFaceRooms" %}
 
+
       </h3>
     </div>
 
     {% for post_object_dict in wall_home.post_objects_list %}
           
-      <div class="clear"></div>
+      <div class="clearfix"></div>
       <div class="post-block-container">
         <!-- POST BLOCK -->
         {% include 'social/widgets/post_block.html' with wall=wall_home post_object=post_object_dict.post_object %}
@@ -41,6 +42,7 @@
   <div class="col-xs-12">
     <h3>
       {% trans "Aucune publication sur OpenFaceRoom" %}
+
 
     </h3>
   </div>

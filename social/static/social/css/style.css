@@ -16,11 +16,10 @@ body {
     border: none;
     cursor: pointer; }
     .navbar-inverse select:hover {
-      color: #fff; }
+      color: white; }
 
 nav .nav-avatar {
-  float: left;
-  margin-right: 10px; }
+  margin-right: 5px; }
 
 h1 {
   margin-top: 0px;
@@ -30,7 +29,6 @@ h1 {
   padding: 0px;
   margin-top: 0px; }
 .top-block button#submit-user-post {
-  float: right;
   margin-top: 5px; }
 
 .post-block-container {
@@ -91,8 +89,5 @@ ul.errorlist {
   list-style-type: none;
   padding: 0px;
   margin: 0px; }
-
-.clear {
-  clear: both; }
 
 /*# sourceMappingURL=style.css.map */

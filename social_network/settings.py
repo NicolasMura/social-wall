@@ -16,6 +16,7 @@ import os
 import socket
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 
@@ -119,8 +120,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 AUTH_USER_MODEL = 'social.Profile'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/'
+LOGIN_URL = '/login/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/m/'
 
