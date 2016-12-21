@@ -22,8 +22,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -101,7 +99,7 @@ USE_TZ = False
 
 gettext = lambda x: x
 LANGUAGES = (
-   ('fr', gettext(_('Français'))),
+   ('fr', gettext(_('Francais'))),
    ('en', gettext(_('Anglais'))),
 )
 

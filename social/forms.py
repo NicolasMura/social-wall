@@ -58,7 +58,7 @@ class ProfileChangeForm(UserChangeForm):
 
         if user.avatar:
             user.avatar = self.cleaned_data['avatar']
-        # Si l'utilisateur décide de supprimer sa photo
+        # If user wants to delete his avatar
         else:
             user.avatar = 'default/avatars/default-avatar.png'
         user.save()

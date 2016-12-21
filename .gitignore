@@ -97,6 +97,9 @@ media/upload/
 __pycache__
 *.pyc
 py3env/
+gunicorn/
+nginx/
+supervisor/
 production.py
 /static
 .sass-cache

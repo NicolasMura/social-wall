@@ -30,9 +30,9 @@ def validate_image(
         valid_extensions=VALID_IMG_EXTENSIONS):
     # Below condition is for robustness only
     if not fieldfile_obj.file.name.endswith(tuple(VALID_IMG_EXTENSIONS)):
-            raise ValidationError(
+            raise ValidationError(_(
                 "Erreur : le format de l'image est incorrect ! "
-                "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS))
+                "(Formats autorisés : {})".format(VALID_IMG_EXTENSIONS)))
     if hasattr(fieldfile_obj.file, 'image'):
         if (
             fieldfile_obj.file.image.width > max_width or
@@ -44,9 +44,9 @@ def validate_image(
         img_width = fieldfile_obj.file.image.size[0]
         img_height = fieldfile_obj.file.image.size[1]
         if img_width*img_height > max_size:
-            raise ValidationError(
+            raise ValidationError(_(
                 "L'image dépasse la taille maximale "
-                "autorisée ({} Mo)".format(MEGABYTE_LIMIT))
+                "autorisée ({} Mo)".format(MEGABYTE_LIMIT)))
 
 
 class Profile(AbstractUser):
@@ -156,12 +156,12 @@ class Post(PostCommentAbstract):
 
 class Comment(PostCommentAbstract):
     class Meta:
-        verbose_name = 'Commentaire'
-        verbose_name_plural = 'Commentaires'
+        verbose_name = _('Commentaire')
+        verbose_name_plural = _('Commentaires')
 
     related_post = models.ForeignKey(
         'social.Post',
-        verbose_name='Post relatif',
+        verbose_name=_('Post relatif'),
         blank=False,
         null=False,
         # related_name="%(class)s_comments",
