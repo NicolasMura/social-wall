@@ -1,4 +1,5 @@
 Django==1.8.13
+django-extensions
 django-suit==0.2.22
 django-bootstrap3
 psycopg2
