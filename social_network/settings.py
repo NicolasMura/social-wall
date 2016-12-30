@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'zn_users',
     'social',
+    'django-extensions',
 )
 
 MIDDLEWARE_CLASSES = (
