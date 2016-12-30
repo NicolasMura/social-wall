@@ -71,13 +71,13 @@
                   <ul class="dropdown-menu">
                     <li><a href="{% url 'social:wall-view' %}">{% trans "Fil d'actualités" %}</a></li>
                     <li><a href="{% url 'social:wall-profile-view' user.username %}">{% trans "Mon mur" %}</a></li>
-                    <li><a href="{% url 'social:user-profile-update-view' user.pk %}">{% trans "Mon profil" %}</a></li>
-                    <li><a href="{% url 'social:generic-logout' %}">{% trans "Déconnexion" %}</a></li>
+                    <li><a href="{% url 'zn_users:user-profile-update-view' user.pk %}">{% trans "Mon profil" %}</a></li>
+                    <li><a href="{% url 'zn_users:generic-logout' %}">{% trans "Déconnexion" %}</a></li>
                   </ul>
                 </li>
                 {% else %}
-                <li><a href="{% url 'social:user-profile-signup-view' %}">{% trans "Inscription" %}</a></li>
-                <li><a href="{% url 'social:generic-login-view' %}">{% trans "Connexion" %}</a></li>
+                <li><a href="{% url 'zn_users:user-profile-signup-view' %}">{% trans "Inscription" %}</a></li>
+                <li><a href="{% url 'zn_users:generic-login-view' %}">{% trans "Connexion" %}</a></li>
                 {% endif %}
               </ul>
             </div>

@@ -11,7 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 #     perform_approve, perform_delete
 # )
 
-from .models import Profile, Post, Comment
+from .models import Post, Comment
+from zn_users.models import Profile
 
 
 def moderate_comments(modeladmin, request, queryset):

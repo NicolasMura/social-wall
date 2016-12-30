@@ -38,7 +38,7 @@
             <p>{% blocktrans with profile_username=wall_profile.profile.username %}Le mur de {{ profile_username }} est vide : écrivez-lui !{% endblocktrans %}</p>
         {% endif %}
       {% else %}
-        <p>{% trans "Vous devez" %} <a href="{% url 'social:user-profile-signup-view' %}">{% trans "vous inscrire</a> ou vous" %} <a href="{% url 'social:generic-login-view' %}">{% trans "vous connecter</a> pour pouvoir vous exprimer." %}</p>
+        <p>{% trans "Vous devez" %} <a href="{% url 'zn_users:user-profile-signup-view' %}">{% trans "vous inscrire</a> ou vous" %} <a href="{% url 'zn_users:generic-login-view' %}">{% trans "vous connecter</a> pour pouvoir vous exprimer." %}</p>
       {% endif %}
 
       {% block wall_top_block %}{% endblock wall_top_block %}

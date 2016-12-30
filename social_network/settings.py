@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import socket
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+# from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/'
@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'bootstrap3',
+    'zn_users',
     'social',
 )
 
@@ -54,9 +55,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'social_network.urls'
 
-TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-)
+# TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+#     'django.core.context_processors.request',
+# )
 
 TEMPLATES = [
     {
@@ -97,7 +98,10 @@ USE_L10N = True
 USE_TZ = False
 
 
-gettext = lambda x: x
+# gettext = lambda x: x
+def gettext(x):
+    return x
+
 LANGUAGES = (
    ('fr', gettext(_('Francais'))),
    ('en', gettext(_('Anglais'))),
@@ -116,18 +120,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-AUTH_USER_MODEL = 'social.Profile'
+AUTH_USER_MODEL = 'zn_users.Profile'
 LOGIN_URL = '/login/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/m/'
 
 
-# Choose right settings additionnal configuration (dev or prod)
+# Define settings configuration (dev or prod)
 HOST = socket.gethostname()
 if HOST != 'vps121400.ovh.net':
+    # Dev settings
     SITE_ID = 1
     DEBUG = True
-    TEMPLATE_DEBUG = True
+    TEMPLATES[0]['OPTIONS']['debug'] = True,
     SECRET_KEY = 'development_settings_secret_key'
     DATABASES = {
         'default': {
@@ -137,4 +142,6 @@ if HOST != 'vps121400.ovh.net':
     }
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
+    # Prod settings
+    TEMPLATES[0]['OPTIONS']['debug'] = False
     from .production import *

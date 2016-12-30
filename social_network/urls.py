@@ -7,6 +7,7 @@ urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('social.urls', namespace='social')),
+    url(r'^user/', include('zn_users.urls', namespace='zn_users')),
 )
 
 urlpatterns += (
