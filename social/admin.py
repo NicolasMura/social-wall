@@ -32,10 +32,10 @@ cancel_comments_moderation.short_description = "Rétablir (activer) "\
 
 
 class ProfileAdmin(admin.ModelAdmin):
-        list_display = ('username', )
-        search_fields = ('username', 'email', )
-        can_delete = False
-        verbose_name_plural = 'Profils utilisateurs'
+    list_display = ('username', )
+    search_fields = ('username', 'email', )
+    can_delete = False
+    verbose_name_plural = 'Profils utilisateurs'
 
 
 class CommentInline(admin.TabularInline):

@@ -256,7 +256,7 @@ msgstr ""
 
 #: social/templates/social/wall_profile.html:19
 msgid "Dernières publications sur votre mur"
-msgstr "Last pusblished posts on your wall"
+msgstr "Last published posts on your wall"
 
 #: social/templates/social/wall_profile.html:19
 #, fuzzy, python-format

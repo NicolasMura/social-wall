@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-# from django.contrib.auth.decorators import login_required
 from django.conf.urls import patterns, url
-# from django.contrib.auth import views as auth_views
 from django.conf.urls import include
 
 from .views import *
 
-# app_name = 'social'
-
 urlpatterns = patterns(
-    # '',
-    'social.views',
+    '',
+    # 'social.views',
     url(
         r'^$',
         WallView.as_view(),

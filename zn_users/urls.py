@@ -7,7 +7,6 @@ from .views import *
 
 urlpatterns = patterns(
     '',
-    # 'zn_users.views',
     url(
         r'^login/$',
         LoginView.as_view(),

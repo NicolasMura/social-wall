@@ -15,7 +15,7 @@ from .forms import ProfileCreationForm, ProfileChangeForm
 
 class LoginView(SuccessMessageMixin, FormView):
     form_class = AuthenticationForm
-    template_name = 'social/login.html'
+    template_name = 'zn_users/login.html'
     success_message = _('Heureux de vous revoir, %(username)s !')
 
     def form_valid(self, form):
@@ -59,7 +59,7 @@ class UserProfileCreateView(SuccessMessageMixin, CreateView):
     # model = Profile
     # fields = ['email', 'username', 'avatar', 'password']
     form_class = ProfileCreationForm
-    template_name = 'social/signup.html'
+    template_name = 'zn_users/signup.html'
     # Redirection to user's wall doesn't work - To correct :
     # success_url = reverse_lazy(
     #     'social:wall-profile-view',
@@ -108,7 +108,7 @@ class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
     # model = Profile  # Needs to declare model (or queryset or queryset)
     # fields = ['email', 'username', 'avatar']
     form_class = ProfileChangeForm
-    template_name = 'social/update-profile.html'
+    template_name = 'zn_users/update-profile.html'
 
     # UserProfileUpdateView needs a QuerySet
     def get_object(self, queryset=None):

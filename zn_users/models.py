@@ -49,8 +49,8 @@ def validate_image(
 
 class Profile(AbstractUser):
     class Meta:
-        verbose_name = _('Profil utilisateur')
-        verbose_name_plural = _('Profils utilisateurs')
+        verbose_name = _('Utilisateur')
+        verbose_name_plural = _('Utilisateurs')
 
     avatar = models.ImageField(
         verbose_name=_("Votre avatar"),
